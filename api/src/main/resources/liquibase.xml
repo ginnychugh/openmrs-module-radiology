@@ -338,4 +338,25 @@
 		<comment>Remove column mwl_status from radiology_study</comment>
 		<dropColumn columnName="mwl_status" tableName="radiology_study" />
 	</changeSet>
+	<changeSet id="radiology-30" author="ivange94">
+		<comment>radiology_report_template</comment>
+		<createTable tableName="radiology_report_template">
+			<column name="template_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="charset" type="text" />
+			<column name="path" type="text" />
+			<column name="dcterms_title" type="text" />
+			<column name="dcterms_description" type="text" />
+			<column name="dcterms_identifier" type="text" />
+			<column name="dcterms_type" type="text" />
+			<column name="dcterms_language" type="text" />
+			<column name="dcterms_publisher" type="text" />
+			<column name="dcterms_rights" type="text" />
+			<column name="dcterms_license" type="text" />
+			<column name="dcterms_date" type="text" />
+			<column name="dcterms_creator" type="text" />
+		</createTable>
+	</changeSet>
 </databaseChangeLog>
