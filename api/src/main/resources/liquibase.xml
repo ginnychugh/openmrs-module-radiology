@@ -338,4 +338,47 @@
 		<comment>Remove column mwl_status from radiology_study</comment>
 		<dropColumn columnName="mwl_status" tableName="radiology_study" />
 	</changeSet>
+	<changeSet id="radiology-30" author="ivange94">
+		<comment>Add table for report templates</comment>
+		<createTable tableName="radiology_report_template">
+			<column name="template_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="charset" type="varchar(32)"/>
+			<column name="path" type="varchar(128)"/>
+			<column name="dcterms_title" type="varchar(256)"/>
+			<column name="dcterms_description" type="text"/>
+			<column name="dcterms_identifier" type="varchar(128)"/>
+			<column name="dcterms_type" type="varchar(32)"/>
+			<column name="dcterms_language" type="varchar(8)"/>
+			<column name="dcterms_publisher" type="varchar(128)"/>
+			<column name="dcterms_rights" type="varchar(128)"/>
+			<column name="dcterms_license" type="varchar(128)"/>
+			<column name="dcterms_date" type="varchar(32)"/>
+			<column name="dcterms_creator" type="varchar(128)"/> 
+		</createTable>
+	</changeSet>
+	<changeSet id="radiology-31" author="ivange94">
+		<comment>Add privilege to work with radiology report templates</comment>
+		<insert tableName="privilege">
+			<column name="privilege" value="Add Radiology Report Templates"/>
+			<column name="description" value="Able to add new report templates"/>
+			<column name="uuid" value="ae4eba5c5604d05828e2463707215802"></column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege" value="Edit Radiology Report Templates"/>
+			<column name="description" value="Able to edit report templates"/> 
+			<column name="uuid" value="12ae06b5ac32391ab3651733af5a4e0e"/>	
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege" value="Delete Radiology Report Templates"/>
+			<column name="description" value="Able to delete report templates from system"/>
+			<column name="uuid" value="9d21eba3d0d5d27d2c3b478edca25b52"/>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege" value="Get Radiology Report Templates"/>
+			<column name="description" value="Able to get report templates"/>
+			<column name="uuid" value="c6ae288bcbcbaa6d6a661961805893ba"/>
+		</insert>
+	</changeSet>
 </databaseChangeLog>
