@@ -56,13 +56,6 @@
                                             }
                                           },
                                           {
-                                            "name": "dcTermsType",
-                                            "render": function(data, type,
-                                                    full, meta) {
-                                              return full.dcTermsType;
-                                            }
-                                          },
-                                          {
                                             "name": "dcTermsCreator",
                                             "render": function(data, type,
                                                     full, meta) {
@@ -116,7 +109,7 @@
                                     {
                                       autoOpen: false,
                                       modal: true,
-                                      title: '<openmrs:message code="radiology.report.template.AddReportTemplate" javaScriptEscape="true"/>',
+                                      title: '<openmrs:message code="radiology.report.template.import.boxheader" javaScriptEscape="true"/>',
                                       width: '90%'
                                     });
 
@@ -130,13 +123,13 @@
 <div id="buttonPanel">
   <div style="float: left">
     <input type="button" id="addTemplateButton"
-      value="<openmrs:message code="radiology.report.template.AddReportTemplate" javaScriptEscape="true"/>" />
+      value="<openmrs:message code="radiology.report.template.button.import" javaScriptEscape="true"/>" />
     <div id="addTemplatePopup">
-      <b class="boxHeader"><openmrs:message code="radiology.report.template.importTemplate" /></b>
+      <b class="boxHeader"><openmrs:message code="radiology.report.template.import.boxheader" /></b>
       <div class="box">
         <form id="templateAddForm" action="radiologyDashboard.form" method="post" enctype="multipart/form-data">
-          <input type="file" name="templateFile" size="40" /> <input type="hidden" name="action" value="upload" /> <input
-            type="submit" value='<openmrs:message code="radiology.report.template.Upload"/>' />
+          <input type="file" name="templateFile" size="40" /> <input type="submit" name="uploadReportTemplate"
+            value='<openmrs:message code="radiology.report.template.upload"/>' />
         </form>
       </div>
       <br />
@@ -146,7 +139,7 @@
 </div>
 
 <br>
-<span class="boxHeader"> <b><spring:message code="radiology.radiologyReportTemplates" /></b> <a id="clearResults"
+<span class="boxHeader"> <b><spring:message code="radiology.report.template.boxheader" /></b> <a id="clearResults"
   href="#" style="float: right"> <spring:message code="radiology.clearResults" />
 </a>
 </span>
@@ -154,7 +147,7 @@
   <table id="searchForm" cellspacing="10">
     <tr>
       <form id="reportTemplateListForm">
-        <td><label><spring:message code="radiology.report.template.title" />:</label> <input id="templateTitle"
+        <td><label><spring:message code="radiology.report.template.search.title" /></label> <input id="templateTitle"
           name="titleQuery" type="text" style="width: 20em" title="<spring:message
 						code="radiology.minChars" />" /></td>
         <td><input id="findReportTemplates" type="button" value="<spring:message code="radiology.find"/>" /></td>
@@ -167,13 +160,12 @@
     <table id="radiologyTemplatesTable" cellspacing="0" width="100%" class="display nowrap">
       <thead>
         <tr>
-          <th><spring:message code="radiology.datatables.column.templateId" /></th>
-          <th><spring:message code="radiology.datatables.column.title" /></th>
-          <th><spring:message code="radiology.datatables.column.type" /></th>
-          <th><spring:message code="radiology.datatables.column.creator" /></th>
-          <th><spring:message code="radiology.datatables.column.publisher" /></th>
-          <th><spring:message code="radiology.datatables.column.rights" /></th>
-          <th><spring:message code="radiology.datatables.column.description" /></th>
+          <th><spring:message code="radiology.datatables.column.report.template.id" /></th>
+          <th><spring:message code="radiology.datatables.column.report.template.title" /></th>
+          <th><spring:message code="radiology.datatables.column.report.template.creator" /></th>
+          <th><spring:message code="radiology.datatables.column.report.template.publisher" /></th>
+          <th><spring:message code="radiology.datatables.column.report.template.rights" /></th>
+          <th><spring:message code="radiology.datatables.column.report.template.description" /></th>
         </tr>
       </thead>
     </table>

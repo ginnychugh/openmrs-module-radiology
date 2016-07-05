@@ -8,11 +8,8 @@
  */
 package org.openmrs.module.radiology.report.template;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,20 +17,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openmrs.api.APIException;
-import org.openmrs.util.OpenmrsUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * A parser to parse MRRT report templates and and return an MrrtReportTemplate object.
  */
+@Component
 class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParser {
     
     
     private static final Log log = LogFactory.getLog(DefaultMrrtReportTemplateFileParser.class);
     
-    private MrrtReportTemplateValidator validator = new DefaultMrrtReportTemplateValidator();
-    
-    private static final String CHARSET = "UTF-8";
+    @Autowired
+    private MrrtReportTemplateValidator validator;
     
     private static final String DCTERMS_TITLE = "dcterms.title";
     
@@ -56,44 +53,15 @@ class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParse
     private static final String DCTERMS_CREATOR = "dcterms.creator";
     
     /**
-    * Parse {@code MRRT} file and return an {@code MrrtReportTemplate} object
-    *
-    * @param file file to be parsed
-    * @return returns MrrtReportTemplate object
-    * @throws IOException if the file could not be read
-    * @throws APIException when the file is not of MRRT standards
-    * 
-    * @see org.openmrs.module.radiology.report.template.MrrtReportTemplate
-    */
+     * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateFileParser#parse(InputStream)
+     */
     @Override
-    public MrrtReportTemplate parse(File file) throws IOException {
-        validator.validate(file);
-        Document doc = Jsoup.parse(file, CHARSET);
+    public MrrtReportTemplate parse(InputStream in) throws IOException {
+        
+        Document doc = Jsoup.parse(in, null, "");
         MrrtReportTemplate result = new MrrtReportTemplate();
         initializeTemplate(result, doc);
-        
         return result;
-    }
-    
-    /**
-    * Parse {@code MRRT} file and return an {@code MrrtReportTemplate} object.
-    *
-    * @param in input stream of template file
-    * @return returns MrrtReportTemplate object
-    * @throws IOException the file could not be read
-    * 
-    * @see org.openmrs.module.radiology.report.template.MrrtReportTemplate
-    */
-    @Override
-    public MrrtReportTemplate parse(String fileName, InputStream in) throws IOException {
-        
-        final String prefix = fileName.substring(0, fileName.lastIndexOf('.'));
-        final String suffix = fileName.substring(fileName.lastIndexOf('.'));
-        final File file = File.createTempFile(prefix, suffix);
-        final OutputStream os = new FileOutputStream(file);
-        OpenmrsUtil.copyFile(in, os);
-        
-        return parse(file);
     }
     
     private final void initializeTemplate(MrrtReportTemplate template, Document doc) {

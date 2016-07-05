@@ -8,7 +8,6 @@
  */
 package org.openmrs.module.radiology.report.template;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -19,27 +18,11 @@ public interface MrrtReportTemplateFileParser {
     
     
     /**
-     * Parse an {@code MRRT} template file and extract metada and create an {@code MrrtReportTemplate} object
+     * Parse an {@code MRRT} template and extract metadata into a {@code MrrtReportTemplate}.
      * 
-     * @param file
-     * @return
-     * @throws IOException when the file could not be read.
-     * @throws APIException when the file fails validation. That is it is not of MRRT standards.
-     * @should throw an APIException when file failed validation.
-     * @should return an MrrtReportTemplate object if file is valid.
+     * @param in the input stream containing the mrrt template
+     * @return the mrrt report template extracted from the input stream
+     * @throws IOException if
      */
-    public MrrtReportTemplate parse(File file) throws IOException;
-    
-    /**
-     * Parse an {@code MRRT} template file and extract metada and create an {@code MrrtReportTemplate} object
-     * 
-     * @param fileName the name of the file being parsed
-     * @param in input stream of the file being parsed
-     * @return returns an {@code MrrtReportTemplate}
-     * @throws IOException when the file could not be read.
-     * @throws APIException when the file fails validation. That is it is not of MRRT standards
-     * @should throw an APIException when file is invalid
-     * @should return an MrrtReportTemplate object is file is valid.
-     */
-    public MrrtReportTemplate parse(String fileName, InputStream in) throws IOException;
+    public MrrtReportTemplate parse(InputStream in) throws IOException;
 }

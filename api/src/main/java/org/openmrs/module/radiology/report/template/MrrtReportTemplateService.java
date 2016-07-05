@@ -29,12 +29,15 @@ public interface MrrtReportTemplateService extends OpenmrsService {
     /**
      * Import an {@code MrrtReportTemplate} into the system.
      * 
-     * @param fileName the name of the file been imported
-     * @param in input stream of the mrrt template file
-     * @throws IOException 
+     * @param in the input stream of the mrrt template file
+     * @throws IOException if OpenmrsUtil.copyFile throws one
+     * TODO improve javadoc for exceptions and add tests
+     * @should create mrrt report template in the database with metadata from input stream
+     * @should create report template file in report template home directory
+     * @should close input stream after report template file has been created
      */
     @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_REPORT_TEMPLATES)
-    public void importMrrtReportTemplate(String fileName, InputStream in) throws IOException;
+    public void importMrrtReportTemplate(InputStream in) throws IOException;
     
     /**
      * Get an {@code MrrtReportTemplate} with a given id.
@@ -50,14 +53,14 @@ public interface MrrtReportTemplateService extends OpenmrsService {
     public MrrtReportTemplate getMrrtReportTemplate(Integer id);
     
     /**
-     *  Get {@code MrrtReportTemplate} by its UUID.
+     * Get {@code MrrtReportTemplate} by its UUID.
      *
-     *  @param uuid UUID of {@code MrrtReportTemplate}
-     *  @return mrrt {@code MrrtReportTemplate} object or null
-     *  @throws IllegalArgumentException if given null
-     *  @should find object given valid uuid
-     *  @should return null if no object found with given uuid
-     *  @should throw illegal argument exception if given null
+     * @param uuid UUID of {@code MrrtReportTemplate}
+     * @return mrrt {@code MrrtReportTemplate} object or null
+     * @throws IllegalArgumentException if given null
+     * @should find object given valid uuid
+     * @should return null if no object found with given uuid
+     * @should throw illegal argument exception if given null
      */
     @Authorized(RadiologyPrivileges.GET_RADIOLOGY_REPORT_TEMPLATES)
     public MrrtReportTemplate getMrrtReportTemplateByUuid(String uuid);
@@ -76,13 +79,13 @@ public interface MrrtReportTemplateService extends OpenmrsService {
     public List<MrrtReportTemplate> getMrrtReportTemplateByTitle(String title);
     
     /**
-     *  Saves a new or existing {@code MrrtReportTemplate}.
+     * Saves a new or existing {@code MrrtReportTemplate}.
      *
-     *  @param template the {@code MrrtReportTemplate} to save
-     *  @return the saved template
-     *  @throws IllegalArgumentException if given null
-     *  @should throw illegal argument exception if given null
-     *  @should save or update given template
+     * @param template the {@code MrrtReportTemplate} to save
+     * @return the saved template
+     * @throws IllegalArgumentException if given null
+     * @should throw illegal argument exception if given null
+     * @should save or update given template
      */
     @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_REPORT_TEMPLATES)
     public MrrtReportTemplate saveMrrtReportTemplate(MrrtReportTemplate template);

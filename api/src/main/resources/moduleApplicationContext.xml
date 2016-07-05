@@ -167,7 +167,4 @@
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="parser" class="org.openmrs.module.radiology.report.template.DefaultMrrtReportTemplateFileParser"></bean>
-	<bean id="validator" class="org.openmrs.module.radiology.report.template.DefaultMrrtReportTemplateValidator"></bean>
 </beans>

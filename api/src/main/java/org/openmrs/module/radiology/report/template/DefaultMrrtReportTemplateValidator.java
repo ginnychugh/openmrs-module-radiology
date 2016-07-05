@@ -11,18 +11,19 @@ package org.openmrs.module.radiology.report.template;
 import java.io.File;
 
 import org.openmrs.api.APIException;
+import org.springframework.stereotype.Component;
 
 /**
  * Default validator implementation for {@code MRRT} templates.
  */
+@Component
 class DefaultMrrtReportTemplateValidator implements MrrtReportTemplateValidator {
     
     
     private static final String VALID_EXTENSION = "html";
     
     /**
-     *  @see org.openmrs.module.radiology.report.template.MrrtReportTemplate
-     *  @see org.openmrs.module.radiology.report.template.MrrtReportTemplateService
+     * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateValidator#validate(File)
      */
     @Override
     public void validate(File templateFile) throws APIException {

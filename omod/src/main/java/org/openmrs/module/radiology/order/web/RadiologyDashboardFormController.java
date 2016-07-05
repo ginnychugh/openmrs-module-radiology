@@ -13,12 +13,13 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
+import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -38,14 +39,25 @@ public class RadiologyDashboardFormController {
         return new ModelAndView(RADIOLOGY_DASHBOARD_FORM_VIEW);
     }
     
-    @RequestMapping(method = RequestMethod.POST)
-    protected ModelAndView upload(HttpServletRequest request) throws IOException {
-        final MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
-        final MultipartFile templateFile = multipartHttpServletRequest.getFile("templateFile");
+    @RequestMapping(method = RequestMethod.POST, params = "uploadReportTemplate")
+    protected ModelAndView uploadReportTemplate(HttpServletRequest request, @RequestParam MultipartFile templateFile)
+            throws IOException {
         
-        mrrtReportTemplateService.importMrrtReportTemplate(templateFile.getOriginalFilename(),
-            templateFile.getInputStream());
-        
+        if (!templateFile.isEmpty()) {
+            try {
+                mrrtReportTemplateService.importMrrtReportTemplate(templateFile.getInputStream());
+                request.getSession()
+                        .setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.report.template.imported");
+            }
+            catch (IOException exception) {
+                request.getSession()
+                        .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
+                            "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
+            }
+        } else {
+            request.getSession()
+                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "radiology.report.template.not.imported.empty");
+        }
         return new ModelAndView(RADIOLOGY_DASHBOARD_FORM_VIEW);
     }
 }

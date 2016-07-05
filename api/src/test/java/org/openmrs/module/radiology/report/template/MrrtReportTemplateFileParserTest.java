@@ -13,15 +13,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.openmrs.api.APIException;
 
 /**
- * Unit test for the {@code MrrtReportTemplateFileParser}.
+ * Tests {@code MrrtReportTemplateFileParser}.
  */
 public class MrrtReportTemplateFileParserTest {
     
@@ -60,20 +60,21 @@ public class MrrtReportTemplateFileParserTest {
     }
     
     /**
-    * @see MrrtReportTemplateFileParser#parse()
-    * @verifies return an mrrt template object if file is valid
-    */
+     * @see MrrtReportTemplateFileParser#parse()
+     * @verifies return an mrrt template object if file is valid
+     */
     @Test
     public void parse_shouldReturnAnMrrtTemplateObjectIfFileIsValid() throws Exception {
         File file = new File(getClass().getClassLoader()
                 .getResource("mrrttemplates/radreport/0000049.html")
                 .getFile());
         
-        MrrtReportTemplate template = parser.parse(file);
+        FileInputStream in = new FileInputStream(file);
+        MrrtReportTemplate template = parser.parse(in);
+        in.close();
         
         assertNotNull(template);
         assertThat(template.getCharset(), is(CHARSET));
-        assertThat(template.getPath(), is(file.getAbsolutePath()));
         assertThat(template.getDcTermsTitle(), is(TEST_DCTERMS_TITLE));
         assertThat(template.getDcTermsDescription(), is(TEST_DCTERMS_DESCRIPTION));
         assertThat(template.getDcTermsIdentifier(), is(TEST_DCTERMS_IDENTIFIER));
@@ -85,19 +86,5 @@ public class MrrtReportTemplateFileParserTest {
         assertThat(template.getDcTermsLicense(), is(TEST_DCTERMS_LICENSE));
         assertThat(template.getDcTermsDate(), is(TEST_DCTERMS_DATE));
         assertThat(template.getDcTermsCreator(), is(TEST_DCTERMS_CREATOR));
-    }
-    
-    /**
-     * @see MrrtReportTemplateFileParser#parse(File)
-     * @verifies throw an APIException when file failed validation.
-     */
-    @Test
-    public void parse_shouldThrowAnAPIExceptionWhenFileFailedValidation() throws Exception {
-        
-        expectedException.expect(APIException.class);
-        expectedException.expectMessage("Invalid file extension (.php). Only (.html) files are accepted");
-        File file = File.createTempFile("test", ".php");
-        System.out.println(file.getName());
-        parser.parse(file);
     }
 }

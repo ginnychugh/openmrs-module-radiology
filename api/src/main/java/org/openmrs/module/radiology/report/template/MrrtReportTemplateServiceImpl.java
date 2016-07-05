@@ -40,16 +40,18 @@ class MrrtReportTemplateServiceImpl extends BaseOpenmrsService implements MrrtRe
     }
     
     /**
-     * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateService#importMrrtReportTemplate(String, InputStream)
+     * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateService#importMrrtReportTemplate(InputStream)
      */
     @Transactional
     @Override
-    public void importMrrtReportTemplate(String fileName, InputStream in) throws IOException {
-        MrrtReportTemplate template = parser.parse(fileName, in);
-        File destinationFile = new File(radiologyProperties.getReportTemplateHome(), fileName);
+    public void importMrrtReportTemplate(InputStream in) throws IOException {
+        MrrtReportTemplate template = parser.parse(in);
+        File destinationFile = new File(radiologyProperties.getReportTemplateHome(), java.util.UUID.randomUUID()
+                .toString());
         template.setPath(destinationFile.getAbsolutePath());
         saveMrrtReportTemplate(template);
         OpenmrsUtil.copyFile(in, new FileOutputStream(destinationFile));
+        in.close();
     }
     
     /**
