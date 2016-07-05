@@ -17,7 +17,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,10 +27,7 @@ class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParse
     
     
     private static final Log log = LogFactory.getLog(DefaultMrrtReportTemplateFileParser.class);
-    
-    @Autowired
-    private MrrtReportTemplateValidator validator;
-    
+  
     private static final String DCTERMS_TITLE = "dcterms.title";
     
     private static final String DCTERMS_DESCRIPTION = "dcterms.description";

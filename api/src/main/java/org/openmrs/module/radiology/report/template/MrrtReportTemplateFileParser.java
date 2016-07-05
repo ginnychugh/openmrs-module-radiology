@@ -22,7 +22,7 @@ public interface MrrtReportTemplateFileParser {
      * 
      * @param in the input stream containing the mrrt template
      * @return the mrrt report template extracted from the input stream
-     * @throws IOException if
+     * @throws IOException if the template file could not be read
      */
     public MrrtReportTemplate parse(InputStream in) throws IOException;
 }
