@@ -12,19 +12,16 @@ package org.openmrs.module.radiology.order.web;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
+import org.openmrs.api.APIException;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
 import org.openmrs.test.BaseContextMockTest;
 import org.openmrs.web.WebConstants;
@@ -44,7 +41,7 @@ public class RadiologyDashboardFormControllerTest extends BaseContextMockTest {
     
     @InjectMocks
     private RadiologyDashboardFormController radiologyDashboardFormController = new RadiologyDashboardFormController();
-
+    
     /**
     * @see RadiologyDashboardFormController#get()
     * @verifies return model and view
@@ -81,9 +78,8 @@ public class RadiologyDashboardFormControllerTest extends BaseContextMockTest {
      */
     @Test
     public void uploadReportTemplate_shouldGiveSuccessMessageWhenImportWasSuccessful() throws Exception {
-    	MockMultipartFile templateFile = new MockMultipartFile(java.util.UUID.randomUUID().toString(), new byte[]{});
+    	MockMultipartFile templateFile = new MockMultipartFile(java.util.UUID.randomUUID().toString(), new byte[]{1, 2, 4});
     	
-        doNothing().when(mrrtReportTemplateService).importMrrtReportTemplate(templateFile.getInputStream());
     	MockHttpServletRequest request = new MockHttpServletRequest();
         ModelAndView modelAndView = radiologyDashboardFormController.uploadReportTemplate(request, templateFile);
         
@@ -94,4 +90,38 @@ public class RadiologyDashboardFormControllerTest extends BaseContextMockTest {
                 .getAttribute(WebConstants.OPENMRS_MSG_ATTR);
         assertThat(message, is("radiology.MrrtReportTemplate.imported"));
     }
+
+	/**
+	 * @see RadiologyDashboardFormController#uploadReportTemplate(HttpServletRequest,MultipartFile)
+	 * @verifies set error message in session when api exception is thrown
+	 */
+	@Test
+	public void uploadReportTemplate_shouldSetErrorMessageInSessionWhenApiExceptionIsThrown() throws Exception {
+    	MockMultipartFile templateFile = new MockMultipartFile(java.util.UUID.randomUUID().toString(), new byte[]{1, 2, 4});
+        doThrow(new APIException()).when(mrrtReportTemplateService).importMrrtReportTemplate(templateFile.getInputStream());
+    	MockHttpServletRequest request = new MockHttpServletRequest();
+        ModelAndView modelAndView = radiologyDashboardFormController.uploadReportTemplate(request, templateFile);
+        assertNotNull(modelAndView);
+        assertThat(modelAndView.getViewName(), is(RadiologyDashboardFormController.RADIOLOGY_DASHBOARD_FORM_VIEW));
+        String errorMessage = (String) request.getSession()
+                .getAttribute(WebConstants.OPENMRS_MSG_ATTR);
+        assertNotNull(errorMessage);   	
+	}
+
+	/**
+	 * @see RadiologyDashboardFormController#uploadReportTemplate(HttpServletRequest,MultipartFile)
+	 * @verifies set error message in session when io exception is thrown
+	 */
+	@Test
+	public void uploadReportTemplate_shouldSetErrorMessageInSessionWhenIoExceptionIsThrown() throws Exception {
+		MockMultipartFile templateFile = new MockMultipartFile(java.util.UUID.randomUUID().toString(), new byte[]{1, 2, 4});
+		MockHttpServletRequest request = new MockHttpServletRequest();
+    	doThrow(new IOException()).when(mrrtReportTemplateService).importMrrtReportTemplate(templateFile.getInputStream());;
+		ModelAndView modelAndView = radiologyDashboardFormController.uploadReportTemplate(request, templateFile);
+		assertNotNull(modelAndView);
+		assertThat(modelAndView.getViewName(), is(RadiologyDashboardFormController.RADIOLOGY_DASHBOARD_FORM_VIEW));
+		String errorMessage = (String) request.getSession()
+                .getAttribute(WebConstants.OPENMRS_ERROR_ATTR);
+		assertNotNull(errorMessage);
+	}
 }
