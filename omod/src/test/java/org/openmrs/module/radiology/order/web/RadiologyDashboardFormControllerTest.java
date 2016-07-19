@@ -12,6 +12,9 @@ package org.openmrs.module.radiology.order.web;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
 import org.openmrs.test.BaseContextMockTest;
 import org.openmrs.web.WebConstants;
@@ -40,7 +44,7 @@ public class RadiologyDashboardFormControllerTest extends BaseContextMockTest {
     
     @InjectMocks
     private RadiologyDashboardFormController radiologyDashboardFormController = new RadiologyDashboardFormController();
-    
+
     /**
     * @see RadiologyDashboardFormController#get()
     * @verifies return model and view
@@ -77,12 +81,10 @@ public class RadiologyDashboardFormControllerTest extends BaseContextMockTest {
      */
     @Test
     public void uploadReportTemplate_shouldGiveSuccessMessageWhenImportWasSuccessful() throws Exception {
-        File file = new File(getClass().getClassLoader()
-                .getResource("mrrttemplates/radreport/0000049.html")
-                .getFile());
-        MockMultipartFile templateFile = new MockMultipartFile(java.util.UUID.randomUUID()
-                .toString(), new FileInputStream(file));
-        MockHttpServletRequest request = new MockHttpServletRequest();
+    	MockMultipartFile templateFile = new MockMultipartFile(java.util.UUID.randomUUID().toString(), new byte[]{});
+    	
+        doNothing().when(mrrtReportTemplateService).importMrrtReportTemplate(templateFile.getInputStream());
+    	MockHttpServletRequest request = new MockHttpServletRequest();
         ModelAndView modelAndView = radiologyDashboardFormController.uploadReportTemplate(request, templateFile);
         
         assertNotNull(modelAndView);
