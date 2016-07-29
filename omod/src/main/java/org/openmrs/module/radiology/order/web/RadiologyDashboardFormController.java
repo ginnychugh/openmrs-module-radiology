@@ -85,4 +85,25 @@ public class RadiologyDashboardFormController {
         }
         return new ModelAndView(RADIOLOGY_DASHBOARD_FORM_VIEW);
     }
+    
+    @RequestMapping(method = RequestMethod.GET, params = "templateId")
+    public ModelAndView displayReportTemplate(HttpServletRequest request, @RequestParam String templateId) {
+        ModelAndView modelAndView = new ModelAndView(RADIOLOGY_DASHBOARD_FORM_VIEW);
+        try {
+            String templateBody = mrrtReportTemplateService.extractBodyContentOfMrrtReportTemplate(templateId);
+            modelAndView.addObject("templateBody", templateBody);
+            modelAndView.addObject("shouldShowPopupDialog", true);
+        }
+        catch (IOException exception) {
+            request.getSession()
+                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
+                        "Error occured while trying to view template => " + exception.getMessage());
+        }
+        catch (Exception exception) {
+            request.getSession()
+                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
+                        "Error occured while trying to view template => " + exception.getMessage());
+        }
+        return modelAndView;
+    }
 }

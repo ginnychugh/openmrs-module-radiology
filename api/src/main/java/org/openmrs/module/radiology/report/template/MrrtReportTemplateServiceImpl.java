@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.radiology.RadiologyProperties;
@@ -62,6 +64,16 @@ class MrrtReportTemplateServiceImpl extends BaseOpenmrsService implements MrrtRe
         saveMrrtReportTemplate(template);
         OpenmrsUtil.copyFile(new FileInputStream(tmp), new FileOutputStream(destinationFile));
         in.close();
+    }
+    
+    @Override
+    public String extractBodyContentOfMrrtReportTemplate(String uuid) throws IOException {
+        MrrtReportTemplate mrrtReportTemplate = getMrrtReportTemplateByUuid(uuid);
+        File templateFile = new File(mrrtReportTemplate.getPath());
+        Document doc = Jsoup.parse(templateFile, null);
+        
+        return doc.select("body")
+                .html();
     }
     
     /**

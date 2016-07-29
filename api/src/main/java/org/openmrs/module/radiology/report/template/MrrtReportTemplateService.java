@@ -50,6 +50,8 @@ public interface MrrtReportTemplateService extends OpenmrsService {
     @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_REPORT_TEMPLATES)
     public void importMrrtReportTemplate(InputStream in) throws IOException;
     
+    public String extractBodyContentOfMrrtReportTemplate(String uuid) throws IOException;
+    
     /**
      * Delete an {@code MrrtReportTemplate} from the database.
      *
