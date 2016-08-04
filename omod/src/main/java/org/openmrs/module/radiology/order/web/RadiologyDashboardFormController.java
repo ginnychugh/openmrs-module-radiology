@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.xml.sax.SAXException;
 
 @Controller
 @RequestMapping(RadiologyDashboardFormController.RADIOLOGY_DASHBOARD_FORM_REQUEST_MAPPING)
@@ -53,6 +54,7 @@ public class RadiologyDashboardFormController {
      * @param templateFile the MrrtReportTemplate file to be imported
      * @return model and view of the radiology dashboard page with success or failure message in session attribute 
      * @throws IOException when templateFile could not be read or is invalid
+     * @throws SAXException if MrrtReportTemplateService throws one
      * @should give error message when template file is empty
      * @should set error message in session when api exception is thrown
      * @should set error message in session when io exception is thrown
@@ -60,7 +62,7 @@ public class RadiologyDashboardFormController {
      */
     @RequestMapping(method = RequestMethod.POST, params = "uploadReportTemplate")
     protected ModelAndView uploadReportTemplate(HttpServletRequest request, @RequestParam MultipartFile templateFile)
-            throws IOException {
+            throws IOException{
         
         if (templateFile.isEmpty()) {
             request.getSession()
@@ -69,7 +71,7 @@ public class RadiologyDashboardFormController {
         }
         
         try {
-            mrrtReportTemplateService.importMrrtReportTemplate(templateFile.getInputStream());
+            mrrtReportTemplateService.importMrrtReportTemplate(templateFile.getInputStream()); 
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.MrrtReportTemplate.imported");
         }

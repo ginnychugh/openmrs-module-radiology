@@ -57,7 +57,7 @@ class MrrtReportTemplateServiceImpl extends BaseOpenmrsService implements MrrtRe
             java.util.UUID.randomUUID()
                     .toString());
         OpenmrsUtil.copyFile(in, new FileOutputStream(tmp));
-        final MrrtReportTemplate template = parser.parse(new FileInputStream(tmp));
+        MrrtReportTemplate template = parser.parse(new FileInputStream(tmp));
         final File destinationFile = new File(radiologyProperties.getReportTemplateHome(), java.util.UUID.randomUUID()
                 .toString());
         template.setPath(destinationFile.getAbsolutePath());
