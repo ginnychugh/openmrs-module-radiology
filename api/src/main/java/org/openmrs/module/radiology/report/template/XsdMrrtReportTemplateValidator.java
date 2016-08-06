@@ -24,13 +24,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openmrs.api.APIException;
-import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 /**
  * Uses xsd with schema to validate {@code MrrtReportTemplate} files.
  */
-@Component
 class XsdMrrtReportTemplateValidator implements MrrtReportTemplateValidator {
     
     

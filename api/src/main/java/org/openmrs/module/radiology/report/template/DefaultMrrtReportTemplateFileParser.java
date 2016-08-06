@@ -10,7 +10,6 @@
 package org.openmrs.module.radiology.report.template;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,13 +21,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openmrs.util.OpenmrsUtil;
-import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 /**
  * A parser to parse MRRT report templates and and return an MrrtReportTemplate object.
  */
-@Component
 class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParser {
     
     
@@ -54,9 +51,13 @@ class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParse
     
     private static final String DCTERMS_CREATOR = "dcterms.creator";
     
-    private MrrtReportTemplateValidator validator = new XsdMrrtReportTemplateValidator();
+    private MrrtReportTemplateValidator validator;
     
-    /**
+	public void setValidator(MrrtReportTemplateValidator validator) {
+		this.validator = validator;
+	}
+
+	/**
      * @throws SAXException 
      * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateFileParser#parse(InputStream)
      */

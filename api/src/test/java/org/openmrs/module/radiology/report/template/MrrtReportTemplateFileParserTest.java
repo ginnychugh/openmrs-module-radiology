@@ -16,17 +16,18 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Tests {@code MrrtReportTemplateFileParser}.
  */
-public class MrrtReportTemplateFileParserTest {
+public class MrrtReportTemplateFileParserTest extends BaseModuleContextSensitiveTest {
     
-    
+    @Autowired
     private MrrtReportTemplateFileParser parser;
     
     @Rule
@@ -53,12 +54,7 @@ public class MrrtReportTemplateFileParserTest {
     private static final String TEST_DCTERMS_DATE = "2013-06-01";
     
     private static final String TEST_DCTERMS_CREATOR = "Creator James, et al.";
-    
-    @Before
-    public void setUp() {
-        parser = new DefaultMrrtReportTemplateFileParser();
-    }
-    
+
     /**
      * @see MrrtReportTemplateFileParser#parse()
      * @verifies return an mrrt template object if file is valid
