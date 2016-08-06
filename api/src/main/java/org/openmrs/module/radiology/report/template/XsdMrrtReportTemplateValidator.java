@@ -59,17 +59,19 @@ class XsdMrrtReportTemplateValidator implements MrrtReportTemplateValidator {
     }
     
     private void validateMetatags(File templateFile) throws IOException {
-    	Document doc = Jsoup.parse(templateFile, null, "");
-    	Elements metatagsWithCharsetAttribute = doc.select("meta[charset]");
-    	
-    	if (metatagsWithCharsetAttribute.isEmpty() || metatagsWithCharsetAttribute.size() > 1) {
-    		throw new APIException("radiology.report.templates.validation.error", null, new Throwable("Template file should have exactly one meta element with charset attribute"));
-    	}
-    	
-    	Elements dublinAttributes = doc.select("meta[name]");
-    	if (dublinAttributes.isEmpty()) {
-    		throw new APIException("radiology.report.templates.validation.error", null, new Throwable("Template file should have at least one meta tag containing dublin core attributes"));
-    	}
+        Document doc = Jsoup.parse(templateFile, null, "");
+        Elements metatagsWithCharsetAttribute = doc.select("meta[charset]");
+        
+        if (metatagsWithCharsetAttribute.isEmpty() || metatagsWithCharsetAttribute.size() > 1) {
+            throw new APIException("radiology.report.templates.validation.error", null,
+                    new Throwable("Template file should have exactly one meta element with charset attribute"));
+        }
+        
+        Elements dublinAttributes = doc.select("meta[name]");
+        if (dublinAttributes.isEmpty()) {
+            throw new APIException("radiology.report.templates.validation.error", null,
+                    new Throwable("Template file should have at least one meta tag containing dublin core attributes"));
+        }
     }
     
     private File getSchemaFile() {

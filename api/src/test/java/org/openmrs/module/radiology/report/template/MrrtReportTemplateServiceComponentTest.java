@@ -259,7 +259,7 @@ public class MrrtReportTemplateServiceComponentTest extends BaseModuleContextSen
     public void importMrrtReportTemplate_shouldCreateMrrtReportTemplateInTheDatabaseWithMetadataFromInputStream()
             throws Exception {
         File file = new File(getClass().getClassLoader()
-                .getResource("mrrttemplates/radreport/ValidTemplate1.html")
+                .getResource("mrrttemplates/ihe/connectathon/2015/CTChestAbdomen.html")
                 .getFile());
         FileInputStream in = new FileInputStream(file);
         File tempFolder = temporaryFolder.newFolder("/mrrt_templates");
@@ -278,7 +278,7 @@ public class MrrtReportTemplateServiceComponentTest extends BaseModuleContextSen
     @Test
     public void importMrrtReportTemplate_shouldCreateReportTemplateFileInReportTemplateHomeDirectory() throws Exception {
         File file = new File(getClass().getClassLoader()
-                .getResource("mrrttemplates/radreport/ValidTemplate1.html")
+                .getResource("mrrttemplates/ihe/connectathon/2015/CTChestAbdomen.html")
                 .getFile());
         FileInputStream in = new FileInputStream(file);
         File tempFolder = temporaryFolder.newFolder("/mrrt_templates");
