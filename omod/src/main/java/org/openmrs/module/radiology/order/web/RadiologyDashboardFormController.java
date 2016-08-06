@@ -62,7 +62,7 @@ public class RadiologyDashboardFormController {
      */
     @RequestMapping(method = RequestMethod.POST, params = "uploadReportTemplate")
     protected ModelAndView uploadReportTemplate(HttpServletRequest request, @RequestParam MultipartFile templateFile)
-            throws IOException{
+            throws IOException {
         
         if (templateFile.isEmpty()) {
             request.getSession()
@@ -71,7 +71,7 @@ public class RadiologyDashboardFormController {
         }
         
         try {
-            mrrtReportTemplateService.importMrrtReportTemplate(templateFile.getInputStream()); 
+            mrrtReportTemplateService.importMrrtReportTemplate(templateFile.getInputStream());
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.MrrtReportTemplate.imported");
         }

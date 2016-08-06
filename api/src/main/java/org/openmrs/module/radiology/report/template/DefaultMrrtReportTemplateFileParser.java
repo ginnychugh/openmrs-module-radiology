@@ -65,7 +65,7 @@ class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParse
         
         File templateFile = getTemplateAsFile(in);
         validator.validate(templateFile);
-        final Document doc = Jsoup.parse(new FileInputStream(templateFile), null, "");
+        final Document doc = Jsoup.parse(templateFile, null, "");
         final MrrtReportTemplate result = new MrrtReportTemplate();
         initializeTemplate(result, doc);
         return result;

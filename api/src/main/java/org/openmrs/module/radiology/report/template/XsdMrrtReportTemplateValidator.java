@@ -20,12 +20,15 @@ import javax.xml.validation.Validator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.openmrs.api.APIException;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 /**
- * Default implementation for {@MrrtReportTemplateValidator}
+ * Uses xsd with schema to validate {@code MrrtReportTemplate} files.
  */
 @Component
 class XsdMrrtReportTemplateValidator implements MrrtReportTemplateValidator {
@@ -46,12 +49,27 @@ class XsdMrrtReportTemplateValidator implements MrrtReportTemplateValidator {
         try {
             schema = factory.newSchema(getSchemaFile());
             validator = schema.newValidator();
+            validateMetatags(templateFile);
             validator.validate(new StreamSource(templateFile));
         }
         catch (SAXException e) {
             log.error(e.getMessage(), e);
-            throw new APIException(e);
+            throw new APIException("radiology.report.templates.validation.error", null, e);
         }
+    }
+    
+    private void validateMetatags(File templateFile) throws IOException {
+    	Document doc = Jsoup.parse(templateFile, null, "");
+    	Elements metatagsWithCharsetAttribute = doc.select("meta[charset]");
+    	
+    	if (metatagsWithCharsetAttribute.isEmpty() || metatagsWithCharsetAttribute.size() > 1) {
+    		throw new APIException("radiology.report.templates.validation.error", null, new Throwable("Template file should have exactly one meta element with charset attribute"));
+    	}
+    	
+    	Elements dublinAttributes = doc.select("meta[name]");
+    	if (dublinAttributes.isEmpty()) {
+    		throw new APIException("radiology.report.templates.validation.error", null, new Throwable("Template file should have at least one meta tag containing dublin core attributes"));
+    	}
     }
     
     private File getSchemaFile() {

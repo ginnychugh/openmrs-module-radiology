@@ -66,7 +66,7 @@ public class MrrtReportTemplateFileParserTest {
     @Test
     public void parse_shouldReturnAnMrrtTemplateObjectIfFileIsValid() throws Exception {
         File file = new File(getClass().getClassLoader()
-                .getResource("mrrttemplates/radreport/ValidTemplate1.html")
+                .getResource("mrrttemplates/ihe/connectathon/2015/CTChestAbdomen.html")
                 .getFile());
         
         FileInputStream in = new FileInputStream(file);

@@ -17,7 +17,6 @@ import org.openmrs.annotation.Authorized;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.radiology.RadiologyPrivileges;
-import org.xml.sax.SAXException;
 
 /**
  * Service layer for {@code MrrtReportTemplate}.
@@ -46,7 +45,7 @@ public interface MrrtReportTemplateService extends OpenmrsService {
      * 
      * @param in the input stream of the mrrt template file
      * @throws IOException if OpenmrsUtil.copyFile throws one
-     * @throws SAXException if MrrtReportTemplateParser throws one
+     * @throws APIException if importing an invalid template file
      * @should create mrrt report template in the database with metadata from input stream
      * @should create report template file in report template home directory
      */
