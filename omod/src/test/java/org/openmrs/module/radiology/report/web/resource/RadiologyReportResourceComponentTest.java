@@ -70,9 +70,9 @@ public class RadiologyReportResourceComponentTest
         assertPropPresent("date");
         assertPropPresent("principalResultsInterpreter");
         assertPropPresent("status");
-        assertPropPresent("body");
         assertPropPresent("display");
         assertPropPresent("voided");
+        assertPropPresent("obs");
     }
     
     /**
@@ -86,9 +86,9 @@ public class RadiologyReportResourceComponentTest
         assertPropPresent("date");
         assertPropPresent("principalResultsInterpreter");
         assertPropPresent("status");
-        assertPropPresent("body");
         assertPropPresent("display");
         assertPropPresent("voided");
+        assertPropPresent("obs");
         assertPropPresent("auditInfo");
     }
 }

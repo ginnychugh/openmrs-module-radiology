@@ -65,9 +65,9 @@ public class RadiologyReportResource extends DataDelegatingCrudResource<Radiolog
         description.addProperty("date");
         description.addProperty("principalResultsInterpreter", Representation.REF);
         description.addProperty("status");
-        description.addProperty("body");
         description.addProperty("display");
         description.addProperty("voided");
+        description.addProperty("obs", Representation.FULL);
     }
     
     /**

@@ -100,7 +100,7 @@
 </c:if>
 <span class="boxHeader"> <b><spring:message code="radiology.report.form.boxheader" /></b>
 </span>
-<form:form id="radiologyReportFormId" modelAttribute="radiologyReport" method="post">
+<form:form id="radiologyReportFormId" modelAttribute="radiologyReport" method="post" enctype="multipart/form-data">
   <div class="box">
     <table>
       <tr>
@@ -156,8 +156,7 @@
           </c:if>
         </td>
         <td>
-          <form:textarea path="body" id="bodyId" disabled="${radiologyReport.status == 'COMPLETED' || radiologyReport.voided}" />
-          <form:errors path="body" cssClass="error" />
+          <input type="file" name="complexDataFile" id="obsId" />
         </td>
       </tr>
       <tr>

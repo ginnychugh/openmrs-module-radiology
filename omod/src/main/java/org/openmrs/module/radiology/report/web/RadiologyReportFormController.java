@@ -9,14 +9,26 @@
  */
 package org.openmrs.module.radiology.report.web;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.openmrs.Concept;
+import org.openmrs.Location;
+import org.openmrs.Obs;
+import org.openmrs.Person;
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.report.RadiologyReportValidator;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
+import org.openmrs.obs.ComplexData;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +39,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -40,6 +54,8 @@ public class RadiologyReportFormController {
     protected static final String RADIOLOGY_REPORT_FORM_REQUEST_MAPPING = "/module/radiology/radiologyReport.form";
     
     static final String RADIOLOGY_REPORT_FORM_VIEW = "/module/radiology/reports/radiologyReportForm";
+    
+    private static final String MRRT_REPORT = "mrrt";
     
     @Autowired
     private RadiologyReportService radiologyReportService;
@@ -68,11 +84,15 @@ public class RadiologyReportFormController {
      * @should create a new radiology report for given radiology order and redirect to its radiology report form
      */
     @RequestMapping(method = RequestMethod.GET, params = "orderId")
-    protected ModelAndView createRadiologyReport(@RequestParam("orderId") RadiologyOrder radiologyOrder) {
+    protected ModelAndView createRadiologyReport(@RequestParam("orderId") RadiologyOrder radiologyOrder,
+            @RequestParam("reportType") String reportType, @RequestParam("templateId") String templateId) {
         
         final RadiologyReport radiologyReport = radiologyReportService.createRadiologyReport(radiologyOrder);
-        return new ModelAndView(
-                "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + radiologyReport.getId());
+        if (radiologyReport.getObs() == null) {
+            radiologyReport.setObs(new Obs());
+        }
+        return new ModelAndView("redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + radiologyReport.getId()
+                + "&reportType=" + reportType + "&templateId=" + templateId);
     }
     
     /**
@@ -82,10 +102,34 @@ public class RadiologyReportFormController {
      * @return the model and view containing radiology report for given radiology report id
      * @should populate model and view with given radiology report
      */
-    @RequestMapping(method = RequestMethod.GET, params = "reportId")
-    protected ModelAndView
-            getRadiologyReportFormWithExistingRadiologyReport(@RequestParam("reportId") RadiologyReport radiologyReport) {
+    @RequestMapping(method = RequestMethod.GET, params = { "reportId", "reportType", "templateId" })
+    protected ModelAndView getRadiologyReportFormWithExistingRadiologyReport(
+            @RequestParam("reportId") RadiologyReport radiologyReport, @RequestParam("reportType") String reportType,
+            @RequestParam("templateId") String templateId) {
         
+        final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
+        if (reportType.equals(MRRT_REPORT)) {
+            final MrrtReportTemplateService mrrtReportTemplateService =
+                    (MrrtReportTemplateService) Context.getService(MrrtReportTemplateService.class);
+            final MrrtReportTemplate mrrtReportTemplate =
+                    mrrtReportTemplateService.getMrrtReportTemplate(Integer.valueOf(templateId));
+            String templateHtmlBody;
+            try {
+                templateHtmlBody = mrrtReportTemplateService.getMrrtReportTemplateHtmlBody(mrrtReportTemplate);
+                modelAndView.addObject("templateHtmlBody", templateHtmlBody);
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        addObjectsToModelAndView(modelAndView, radiologyReport);
+        modelAndView.addObject(new VoidRadiologyReportRequest());
+        return modelAndView;
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, params = "reportId")
+    protected ModelAndView getRadiologyReport(@RequestParam("reportId") RadiologyReport radiologyReport) {
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
         addObjectsToModelAndView(modelAndView, radiologyReport);
         modelAndView.addObject(new VoidRadiologyReportRequest());
@@ -110,6 +154,13 @@ public class RadiologyReportFormController {
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
         
         try {
+            final Concept concept = Context.getConceptService()
+                    .getConcept(6100);
+            final Obs obs = new Obs(new Person(1), concept, new Date(), new Location(1));
+            setComplexData(obs, request);
+            Context.getObsService()
+                    .saveObs(obs, null);
+            radiologyReport.setObs(obs);
             radiologyReportService.saveRadiologyReportDraft(radiologyReport);
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.RadiologyReport.savedDraft");
@@ -120,6 +171,10 @@ public class RadiologyReportFormController {
         catch (APIException apiException) {
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, apiException.getMessage());
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         
         addObjectsToModelAndView(modelAndView, radiologyReport);
@@ -198,6 +253,13 @@ public class RadiologyReportFormController {
         }
         
         try {
+            final Concept concept = Context.getConceptService()
+                    .getConcept(6100);
+            final Obs obs = new Obs(new Person(1), concept, new Date(), new Location(1));
+            setComplexData(obs, request);
+            Context.getObsService()
+                    .saveObs(obs, null);
+            radiologyReport.setObs(obs);
             radiologyReportService.saveRadiologyReport(radiologyReport);
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.RadiologyReport.completed");
@@ -209,6 +271,11 @@ public class RadiologyReportFormController {
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, apiException.getMessage());
         }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
         addObjectsToModelAndView(modelAndView, radiologyReport);
         modelAndView.addObject(new VoidRadiologyReportRequest());
         return modelAndView;
@@ -226,5 +293,23 @@ public class RadiologyReportFormController {
         
         modelAndView.addObject("radiologyReport", radiologyReport);
         modelAndView.addObject("radiologyOrder", radiologyReport.getRadiologyOrder());
+    }
+    
+    private InputStream setComplexData(Obs obs, HttpServletRequest request) throws IOException {
+        InputStream complexDataInputStream = null;
+        
+        if (request instanceof MultipartHttpServletRequest) {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            MultipartFile complexDataFile = multipartRequest.getFile("complexDataFile");
+            if (complexDataFile != null && !complexDataFile.isEmpty()) {
+                complexDataInputStream = complexDataFile.getInputStream();
+                
+                ComplexData complexData = new ComplexData(complexDataFile.getOriginalFilename(), complexDataInputStream);
+                
+                obs.setComplexData(complexData);
+            }
+        }
+        
+        return complexDataInputStream;
     }
 }

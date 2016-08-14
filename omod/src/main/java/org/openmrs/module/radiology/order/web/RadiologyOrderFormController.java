@@ -31,6 +31,8 @@ import org.openmrs.module.radiology.order.RadiologyOrderService;
 import org.openmrs.module.radiology.order.RadiologyOrderValidator;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
 import org.openmrs.module.radiology.study.RadiologyStudy;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
