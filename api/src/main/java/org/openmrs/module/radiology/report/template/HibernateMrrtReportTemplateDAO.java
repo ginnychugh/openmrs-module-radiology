@@ -84,6 +84,15 @@ class HibernateMrrtReportTemplateDAO implements MrrtReportTemplateDAO {
         return result == null ? new ArrayList<>() : result;
     }
     
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<MrrtReportTemplate> getAllMrrtReportTemplates() {
+        final Criteria crit = sessionFactory.getCurrentSession()
+                .createCriteria(MrrtReportTemplate.class);
+        final List<MrrtReportTemplate> result = (List<MrrtReportTemplate>) crit.list();
+        return result == null ? new ArrayList<>() : result;
+    }
+    
     /**
      * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateService#saveMrrtReportTemplate(MrrtReportTemplate)
      */

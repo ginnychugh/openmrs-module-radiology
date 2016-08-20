@@ -17,11 +17,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.hamcrest.Matchers;
@@ -30,14 +35,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.openmrs.Provider;
 import org.openmrs.api.APIException;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ProviderService;
+import org.openmrs.module.radiology.RadiologyConstants;
 import org.openmrs.module.radiology.dicom.code.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.order.RadiologyOrderService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Tests {@link RadiologyReportService}.
@@ -89,6 +98,13 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
     
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+    
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    
+    @Autowired
+    @Qualifier("adminService")
+    private AdministrationService administrationService;
     
     /**
      * Overriding following method is necessary to enable MVCC which is disabled by default in DB h2
@@ -200,15 +216,11 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
         
         RadiologyReport existingRadiologyReport = radiologyReportService.getRadiologyReport(EXISTING_RADIOLOGY_REPORT_ID);
         existingRadiologyReport.setStatus(RadiologyReportStatus.DRAFT);
-        existingRadiologyReport.setBody("test - text");
         
         assertNotNull(radiologyReportService.saveRadiologyReportDraft(existingRadiologyReport));
         assertThat(radiologyReportService.saveRadiologyReportDraft(existingRadiologyReport)
                 .getId(),
             is(EXISTING_RADIOLOGY_REPORT_ID));
-        assertThat(radiologyReportService.saveRadiologyReportDraft(existingRadiologyReport)
-                .getBody(),
-            is("test - text"));
     }
     
     /**
@@ -279,7 +291,6 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
                 radiologyOrderService.getRadiologyOrder(RADIOLOGY_ORDER_WITH_STUDY_AND_COMPLETED_RADIOLOGY_REPORT);
         RadiologyReport radiologyReport = new RadiologyReport(radiologyOrder);
         radiologyReport.setId(1000);
-        radiologyReport.setBody("fracture somewhere; not done still draft.");
         
         expectedException.expect(APIException.class);
         expectedException.expectMessage("radiology.RadiologyReport.cannot.saveDraft.already.reported");
@@ -490,7 +501,6 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
         radiologyReportService.saveRadiologyReport(radiologyReport);
         
         radiologyReport = radiologyReportService.getRadiologyReport(DRAFT_RADIOLOGY_REPORT);
-        radiologyReport.setBody(null);
         
         expectedException.expect(APIException.class);
         expectedException.expectMessage("failed to validate with reason:");

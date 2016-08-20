@@ -14,6 +14,7 @@ import java.util.Date;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Provider;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
 
 /**
  * RadiologyReport represents a radiology report written by a Provider for a RadiologyOrder once the
@@ -32,7 +33,9 @@ public class RadiologyReport extends BaseOpenmrsData {
     
     private RadiologyReportStatus status;
     
-    private String body;
+    private String path;
+    
+    private MrrtReportTemplate mrrtReportTemplate;
     
     /**
      * Creates a new instance of {@link RadiologyReport}.
@@ -176,20 +179,39 @@ public class RadiologyReport extends BaseOpenmrsData {
     }
     
     /**
-     * Get body of RadiologyReport.
+     * Get path to RadiologyReport.
      * 
-     * @return body of RadiologyReport
+     * @return path to RadiologyReport
      */
-    public String getBody() {
-        return body;
+    public String getPath() {
+        return path;
     }
     
     /**
-     * Set body of RadiologyReport.
+     * Set path to RadiologyReport.
      * 
-     * @param body body of RadiologyReport
+     * @param path path to RadiologyReport
      */
-    public void setBody(String body) {
-        this.body = body;
+    public void setPath(String path) {
+        this.path = path;
     }
+    
+    /**
+     * Get which template to use an author report.
+     * 
+     * @return mrrtReportTemplate for creating report. 
+     */
+    public MrrtReportTemplate getMrrtReportTemplate() {
+        return mrrtReportTemplate;
+    }
+    
+    /**
+     * Set which template to use and author report.
+     * 
+     * @param mrrtReportTemplate the mrrtReportTemplate for report creating. If null, a free text report will be created
+     */
+    public void setMrrtReportTemplate(MrrtReportTemplate mrrtReportTemplate) {
+        this.mrrtReportTemplate = mrrtReportTemplate;
+    }
+    
 }
