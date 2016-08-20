@@ -490,4 +490,14 @@
 								 baseTableName="radiology_report" baseColumnNames="changed_by"
 								 referencedTableName="users" referencedColumnNames="user_id"/>
 	</changeSet>
+	<changeSet id="radiology-41" author="ivange94">
+		<comment>Drop report_body column from radiology_report table</comment>
+		<dropColumn tableName="radiology_report" columnName="report_body"/>
+	</changeSet>
+	<changeSet id="radiology-42" author="ivange94">
+		<comment>Add report_path column to radiology_report table</comment>
+		<addColumn tableName="radiology_report">
+			<column name="report_path" type="varchar(256)"/>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

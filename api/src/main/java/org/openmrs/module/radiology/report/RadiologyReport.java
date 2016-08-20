@@ -32,7 +32,7 @@ public class RadiologyReport extends BaseOpenmrsData {
     
     private RadiologyReportStatus status;
     
-    private String body;
+    private String path;
     
     /**
      * Creates a new instance of {@link RadiologyReport}.
@@ -176,20 +176,20 @@ public class RadiologyReport extends BaseOpenmrsData {
     }
     
     /**
-     * Get body of RadiologyReport.
+     * Get path to RadiologyReport.
      * 
-     * @return body of RadiologyReport
+     * @return path to RadiologyReport
      */
-    public String getBody() {
-        return body;
+    public String getPath() {
+        return path;
     }
     
     /**
-     * Set body of RadiologyReport.
+     * Set path to RadiologyReport.
      * 
-     * @param body body of RadiologyReport
+     * @param path path to RadiologyReport
      */
-    public void setBody(String body) {
-        this.body = body;
+    public void setPath(String path) {
+        this.path = path;
     }
 }
