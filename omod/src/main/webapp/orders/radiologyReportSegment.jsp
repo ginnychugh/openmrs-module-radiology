@@ -18,11 +18,11 @@
 	 
 	 	console.log(Radiology.getRestRootEndpoint() + "/mrrtreporttemplate/");
 	 	
-	 	$j.getJSON(Radiology.getRestRootEndpoint() + "/mrrtreporttemplate/", function() {
-	 		var options = $("#templateId");
+	 	$j.getJSON(Radiology.getRestRootEndpoint() + "/mrrtreporttemplate/", function(result) {
+	 		var options = $j("#templateId");
 	 		
 	 		$j.each(result, function() {
-	 			options.append($("<option />").val(this.templateId).text(this.dcTermsTitle));
+	 			options.append($j("<option />").val(this.templateId).text(this.dcTermsTitle));
 	 		});
 	 	});
 	});

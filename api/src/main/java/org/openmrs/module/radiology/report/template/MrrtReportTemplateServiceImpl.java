@@ -139,6 +139,11 @@ class MrrtReportTemplateServiceImpl extends BaseOpenmrsService implements MrrtRe
         return mrrtReportTemplateDAO.getMrrtReportTemplates(mrrtReportTemplateSearchCriteria);
     }
     
+    @Override
+    public List<MrrtReportTemplate> getAllMrrtReportTemplates() {
+        return mrrtReportTemplateDAO.getAllMrrtReportTemplates();
+    }
+    
     /**
      * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateService#getMrrtReportTemplateHtmlBody(MrrtReportTemplate)
      */

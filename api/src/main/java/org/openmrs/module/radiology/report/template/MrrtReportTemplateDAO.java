@@ -40,6 +40,8 @@ interface MrrtReportTemplateDAO {
      */
     public List<MrrtReportTemplate> getMrrtReportTemplates(MrrtReportTemplateSearchCriteria searchCriteria);
     
+    public List<MrrtReportTemplate> getAllMrrtReportTemplates();
+    
     /**
      * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateService#saveMrrtReportTemplate(MrrtReportTemplate)
      */

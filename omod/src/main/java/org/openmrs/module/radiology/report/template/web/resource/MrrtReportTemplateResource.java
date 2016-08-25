@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.radiology.report.template.web.resource;
 
+import java.util.List;
+
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
@@ -19,9 +21,12 @@ import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
+import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs2_0.RestConstants2_0;
 
 /**
@@ -149,4 +154,12 @@ public class MrrtReportTemplateResource extends DataDelegatingCrudResource<MrrtR
     public String getResourceVersion() {
         return RestConstants2_0.RESOURCE_VERSION;
     }
+    
+    @Override
+    protected PageableResult doGetAll(RequestContext context) throws ResponseException {
+        final List<MrrtReportTemplate> result = Context.getService(MrrtReportTemplateService.class)
+                .getAllMrrtReportTemplates();
+        return new NeedsPaging<MrrtReportTemplate>(result, context);
+    }
+    
 }

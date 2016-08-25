@@ -116,6 +116,8 @@ public interface MrrtReportTemplateService extends OpenmrsService {
     public List<MrrtReportTemplate>
             getMrrtReportTemplates(MrrtReportTemplateSearchCriteria mrrtReportTemplateSearchCriteria);
     
+    public List<MrrtReportTemplate> getAllMrrtReportTemplates();
+    
     /**
      * Get the HTML body content of {@code MrrtReportTemplate's} file.
      * 
