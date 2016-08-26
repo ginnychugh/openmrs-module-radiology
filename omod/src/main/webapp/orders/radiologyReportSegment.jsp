@@ -6,7 +6,6 @@
 	$j(document).ready(function() {
 	  
 	 	$j("#reportType").change(function() {
-	 	  	console.log("you are changing the value of report type to " + $j('#reportType').val());
 	 		var reportType = $j('#reportType').val();
 	 		if (reportType == "mrrt") {
 	 		  $j('#templateIdSection').show();
@@ -16,15 +15,15 @@
 	 		}
 	 	});
 	 
-	 	console.log(Radiology.getRestRootEndpoint() + "/mrrtreporttemplate/");
-	 	
-	 	$j.getJSON(Radiology.getRestRootEndpoint() + "/mrrtreporttemplate/", function(result) {
-	 		var options = $j("#templateId");
+	 	$j.getJSON(Radiology.getRestRootEndpoint() + "/mrrtreporttemplate/?v=full", function(data) {
+	 		var results = data.results;
+	 		var options = $j('#templateId');
 	 		
-	 		$j.each(result, function() {
+	 		$j.each(results, function() {
 	 			options.append($j("<option />").val(this.templateId).text(this.dcTermsTitle));
 	 		});
 	 	});
+	 	
 	});
 </script>
 <br>
