@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
@@ -39,6 +40,17 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
     @Transactional
     public synchronized RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder) {
         
+        return createRadiologyReport(radiologyOrder, null);
+    }
+    
+    /**
+     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder, MrrtReportTemplate)
+     */
+    @Override
+    @Transactional
+    public synchronized RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder,
+            MrrtReportTemplate mrrtReportTemplate) {
+        
         if (radiologyOrder == null) {
             throw new IllegalArgumentException("radiologyOrder cannot be null");
         }
@@ -52,6 +64,7 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
             throw new APIException("radiology.RadiologyReport.cannot.create.already.completed");
         }
         final RadiologyReport radiologyReport = new RadiologyReport(radiologyOrder);
+        radiologyReport.setMrrtReportTemplate(mrrtReportTemplate);
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
     }
     

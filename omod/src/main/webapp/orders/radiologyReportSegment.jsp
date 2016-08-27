@@ -32,7 +32,7 @@
   </span>
   <c:choose>
     <c:when test="${radiologyReportNeedsToBeCreated}">
-      <form:form method="post" modelAttribute="radiologyOrder" cssClass="box" id="claimReportForm">
+      <form:form method="get" modelAttribute="radiologyOrder" cssClass="box" id="claimReportForm" action="${pageContext.request.contextPath}/module/radiology/radiologyReport.form">
       <spring:bind path="orderId">
       	<input type="hidden" name="orderId" value="${status.value}"/>
       </spring:bind>

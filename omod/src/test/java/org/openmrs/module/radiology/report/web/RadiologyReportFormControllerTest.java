@@ -61,10 +61,10 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
         // given
         RadiologyReport mockRadiologyReport = RadiologyTestData.getMockRadiologyReport1();
         RadiologyOrder mockRadiologyOrder = mockRadiologyReport.getRadiologyOrder();
-        
+        HttpServletRequest request = mock(HttpServletRequest.class);
         when(radiologyReportService.createRadiologyReport(mockRadiologyOrder)).thenReturn(mockRadiologyReport);
         
-        ModelAndView modelAndView = radiologyReportFormController.createRadiologyReport(mockRadiologyOrder);
+        ModelAndView modelAndView = radiologyReportFormController.createRadiologyReport(request, mockRadiologyOrder);
         
         assertNotNull(modelAndView);
         assertThat(modelAndView.getViewName(),

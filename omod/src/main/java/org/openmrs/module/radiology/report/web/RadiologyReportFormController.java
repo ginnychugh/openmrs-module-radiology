@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.report.RadiologyReportValidator;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,9 +71,18 @@ public class RadiologyReportFormController {
      * @should create a new radiology report for given radiology order and redirect to its radiology report form
      */
     @RequestMapping(method = RequestMethod.GET, params = "orderId")
-    protected ModelAndView createRadiologyReport(@RequestParam("orderId") RadiologyOrder radiologyOrder) {
+    protected ModelAndView createRadiologyReport(HttpServletRequest request,
+            @RequestParam("orderId") RadiologyOrder radiologyOrder) {
         
-        final RadiologyReport radiologyReport = radiologyReportService.createRadiologyReport(radiologyOrder);
+        final String reportType = request.getParameter("reportType");
+        MrrtReportTemplate mrrtReportTemplate = null;
+        if ("mrrt".equals(reportType)) {
+            final String templateId = request.getParameter("templateId");
+            mrrtReportTemplate = Context.getService(MrrtReportTemplateService.class)
+                    .getMrrtReportTemplate(Integer.valueOf(templateId));
+        }
+        final RadiologyReport radiologyReport =
+                radiologyReportService.createRadiologyReport(radiologyOrder, mrrtReportTemplate);
         return new ModelAndView(
                 "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + radiologyReport.getId());
     }

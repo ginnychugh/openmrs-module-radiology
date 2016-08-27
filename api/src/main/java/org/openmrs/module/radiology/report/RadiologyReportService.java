@@ -16,6 +16,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.radiology.RadiologyPrivileges;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
 
 /**
  * Service layer for {@code RadiologyReport}.
@@ -55,6 +56,9 @@ public interface RadiologyReportService extends OpenmrsService {
      */
     @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_REPORTS)
     public RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder);
+    
+    @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_REPORTS)
+    public RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder, MrrtReportTemplate mrrtReportTemplate);
     
     /**
      * Saves an existing {@code RadiologyReport} which is in a draft state to the database.
