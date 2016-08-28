@@ -9,17 +9,30 @@
  */
 package org.openmrs.module.radiology.report;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 @Transactional(readOnly = true)
 class RadiologyReportServiceImpl extends BaseOpenmrsService implements RadiologyReportService {
@@ -28,6 +41,11 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
     private static final Log log = LogFactory.getLog(RadiologyReportServiceImpl.class);
     
     private RadiologyReportDAO radiologyReportDAO;
+    
+    private final String XML_ROOT_ELEMENT = "report";
+    
+    @Autowired
+    private RadiologyProperties radiologyProperties;
     
     public void setRadiologyReportDAO(RadiologyReportDAO radiologyReportDAO) {
         this.radiologyReportDAO = radiologyReportDAO;
@@ -140,6 +158,48 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         radiologyReport.setDate(new Date());
         radiologyReport.setStatus(RadiologyReportStatus.COMPLETED);
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
+    }
+    
+    /**
+     * @see RadiologyReportService#saveRadiologyReport(RadiologyReport, Map)
+     */
+    @Transactional
+    @Override
+    public synchronized RadiologyReport saveRadiologyReport(RadiologyReport radiologyReport, Map<String, String> report)
+            throws Exception {
+        
+        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        final Document document = dBuilder.newDocument();
+        
+        final Element rootElement = document.createElement(XML_ROOT_ELEMENT);
+        document.appendChild(rootElement);
+        
+        for (Map.Entry<String, String> entry : report.entrySet()) {
+            Element element = document.createElement(entry.getKey());
+            element.setTextContent(entry.getValue());
+            rootElement.appendChild(element);
+        }
+        
+        final File reportFile = new File(radiologyProperties.getReportHome(), java.util.UUID.randomUUID()
+                .toString());
+        
+        if (!reportFile.exists()) {
+            reportFile.createNewFile();
+        }
+        
+        final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        final Transformer transformer = transformerFactory.newTransformer();
+        final DOMSource source = new DOMSource(document);
+        final StreamResult result = new StreamResult(reportFile);
+        
+        transformer.transform(source, result);
+        
+        // Output to console for testing
+        StreamResult consoleResult = new StreamResult(System.out);
+        transformer.transform(source, consoleResult);
+        radiologyReport.setPath(reportFile.getAbsolutePath());
+        return saveRadiologyReport(radiologyReport);
     }
     
     /**

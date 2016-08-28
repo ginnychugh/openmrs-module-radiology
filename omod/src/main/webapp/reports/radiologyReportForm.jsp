@@ -139,7 +139,7 @@
                     </c:otherwise>
                 </c:choose>
             </c:when>
-          </c:choose></td>
+          </c:choose>
           </td>
       </tr>
       <c:if test="${radiologyReport.status == 'COMPLETED'}">
@@ -156,8 +156,7 @@
           </c:if>
         </td>
         <td>
-          <form:textarea path="body" id="bodyId" disabled="${radiologyReport.status == 'COMPLETED' || radiologyReport.voided}" />
-          <form:errors path="body" cssClass="error" />
+          <textarea name="body" id="bodyId"></textarea>
         </td>
       </tr>
       <tr>

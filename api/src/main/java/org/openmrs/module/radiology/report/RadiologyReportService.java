@@ -10,6 +10,7 @@
 package org.openmrs.module.radiology.report;
 
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.APIException;
@@ -123,6 +124,18 @@ public interface RadiologyReportService extends OpenmrsService {
      */
     @Authorized(RadiologyPrivileges.EDIT_RADIOLOGY_REPORTS)
     public RadiologyReport saveRadiologyReport(RadiologyReport radiologyReport);
+    
+    /**
+     * Saves an existing {@code RadiologyReport} in database and on file system.
+     * 
+     * @param radiologyReport the radiology report to be saved and completed
+     * @param report the contents of report to be saved.
+     * @return the saved radiology report
+     * @throws Exception
+     * @should save report on file system
+     */
+    @Authorized(RadiologyPrivileges.EDIT_RADIOLOGY_REPORTS)
+    public RadiologyReport saveRadiologyReport(RadiologyReport radiologyReport, Map<String, String> report) throws Exception;
     
     /**
      * Get the {@code RadiologyReport} by its {@code reportId}.

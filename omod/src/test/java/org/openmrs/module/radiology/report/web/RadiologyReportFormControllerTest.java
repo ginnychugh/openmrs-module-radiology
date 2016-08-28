@@ -281,6 +281,7 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
     }
     
     /**
+     * @throws Exception 
      * @see RadiologyReportFormController#completeRadiologyReport(HttpServletRequest, RadiologyReport,
      *      BindingResult)
      * @verifies complete given radiology report if valid and set http session attribute openmrs message to report completed and redirect
@@ -288,7 +289,8 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
      */
     @Test
     public void
-            completeRadiologyReport_shouldCompleteGivenRadiologyReportIfValidAndSetHttpSessionAttributeOpenmrsMessageToReportCompletedAndRedirectToItsReportForm() {
+            completeRadiologyReport_shouldCompleteGivenRadiologyReportIfValidAndSetHttpSessionAttributeOpenmrsMessageToReportCompletedAndRedirectToItsReportForm()
+                    throws Exception {
         
         // given
         RadiologyReport mockRadiologyReport = RadiologyTestData.getMockRadiologyReport1();
@@ -315,12 +317,13 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
     }
     
     /**
+     * @throws Exception 
      * @see RadiologyReportFormController#completeRadiologyReport(HttpServletRequest, RadiologyReport,
      *      BindingResult)
      * @verifies not complete and redirect given invalid radiology report
      */
     @Test
-    public void completeRadiologyReport_shouldNotCompleteGivenRadiologyReportIfItIsNotValid() {
+    public void completeRadiologyReport_shouldNotCompleteGivenRadiologyReportIfItIsNotValid() throws Exception {
         
         // given
         RadiologyReport mockRadiologyReport = RadiologyTestData.getMockRadiologyReport1();
