@@ -61,12 +61,12 @@ public class XsdMrrtReportTemplateValidator implements MrrtReportTemplateValidat
         final Elements metatagsWithCharsetAttribute = doc.select("meta[charset]");
         
         if (metatagsWithCharsetAttribute.isEmpty() || metatagsWithCharsetAttribute.size() > 1) {
-            throw new APIException("radiology.report.template.validation.error.meta.charset");
+            throw new APIException("radiology.report.template.validation.error.meta.charset", null, null);
         }
         
         final Elements dublinAttributes = doc.select("meta[name]");
         if (dublinAttributes.isEmpty()) {
-            throw new APIException("radiology.report.template.validation.error.meta.dublinCore");
+            throw new APIException("radiology.report.template.validation.error.meta.dublinCore", null, null);
         }
     }
     
