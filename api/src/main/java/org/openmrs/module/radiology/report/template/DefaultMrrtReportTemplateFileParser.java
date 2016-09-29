@@ -65,9 +65,9 @@ class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParse
     
     private static final String DCTERMS_CREATOR = "dcterms.creator";
     
-    private MrrtReportTemplateValidator validator;
+    private XsdMrrtReportTemplateValidator validator;
     
-    public void setValidator(MrrtReportTemplateValidator validator) {
+    public void setValidator(XsdMrrtReportTemplateValidator validator) {
         this.validator = validator;
     }
     

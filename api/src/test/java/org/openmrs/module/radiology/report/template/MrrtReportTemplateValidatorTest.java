@@ -22,7 +22,7 @@ import org.openmrs.api.APIException;
 public class MrrtReportTemplateValidatorTest {
     
     
-    MrrtReportTemplateValidator validator = new XsdMrrtReportTemplateValidator();
+	XsdMrrtReportTemplateValidator validator = new XsdMrrtReportTemplateValidator();
     
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

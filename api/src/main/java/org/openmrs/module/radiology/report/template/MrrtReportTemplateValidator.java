@@ -9,45 +9,43 @@
  */
 package org.openmrs.module.radiology.report.template;
 
-import java.io.File;
-import java.io.IOException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.annotation.Handler;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 /**
  * Validates {@code MrrtReportTemplate}.
  * 
  * @see MrrtReportTemplate
  */
-public interface MrrtReportTemplateValidator {
-    
-    
-    /**
-     * Validate template file and make sure it follows {@code MRRT} standards.
+@Component
+@Handler(supports = { MrrtReportTemplate.class })
+public class MrrtReportTemplateValidator implements Validator {
+	
+	protected final Log log = LogFactory.getLog(MrrtReportTemplateValidator.class);
+
+	/**
+     * Determines if the command object being submitted is a valid type
      *
-     * @param templateFile the mrrt report template file been validated
-     * @throws IOException if one is thrown while reading template file
-     * @throws APIException if template file fails validation
-     * @should pass if template template file follows mrrt standards
-     * @should throw api exception if template does not have an html element
-     * @should throw api exception if template has more than one html element
-     * @should throw api exception if html element does not have a head element
-     * @should throw api exception if html element has more than one head element
-     * @should throw api exception if head element does not have a title element
-     * @should throw api exception if head element has more than one title element
-     * @should throw api exception if head element does not have a meta element with charset attribute
-     * @should throw api exception if head element has more than one meta element with charset attribute
-     * @should throw api exception if head element does not have one or more meta elements denoting dublin core attributes
-     * @should throw api exception if head element does not have script element
-     * @should throw api exception if head element has more than one script element
-     * @should throw api exception if script element does not have a template attributes element
-     * @should throw api exception if script element has more than one template attributes element
-     * @should throw api exception if coding schemes element does not have at least one coding scheme element
-     * @should throw api exception if term element does not have a code element
-     * @should throw api exception if term element has more than one code element
-     * @should throw api exception if code element lacks one of meaning scheme or value attribute
-     * @should throw api exception if template attributes element does not have a coded content element
-     * @should throw api exception if template attributes element has more than one coded content element
-     * @should throw api exception if html element does not have a body element
-     * @should throw api exception if html element has more than one body element 
+     * @see org.springframework.validation.Validator#supports(java.lang.Class)
+     * @should return true for mrrt report template objects
+     * @should return false for other object types
      */
-    public void validate(File templateFile) throws IOException;
+	@Override
+	public boolean supports(Class<?> clazz) {
+		return MrrtReportTemplate.class.isAssignableFrom(clazz);
+	}
+
+	@Override
+	public void validate(Object obj, Errors errors) {
+		final MrrtReportTemplate mrrtReportTemplate = (MrrtReportTemplate) obj;
+		if (mrrtReportTemplate == null) {
+			errors.reject("error.general");
+		}
+	}
+    
+    
 }

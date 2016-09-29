@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 /**
  * Uses xsd with schema to validate {@code MrrtReportTemplate} files.
  */
-public class XsdMrrtReportTemplateValidator implements MrrtReportTemplateValidator {
+public class XsdMrrtReportTemplateValidator{
     
     
     private static final Log log = LogFactory.getLog(XsdMrrtReportTemplateValidator.class);
@@ -37,9 +37,34 @@ public class XsdMrrtReportTemplateValidator implements MrrtReportTemplateValidat
     private static final String MRRT_REPORT_TEMPLATE_SCHEMA_FILE = "MrrtReportTemplateSchema.xsd";
     
     /**
-     * @see org.openmrs.module.radiology.report.template.MrrtReportTemplateValidator#validate(File)
+     * Validate template file and make sure it follows {@code MRRT} standards.
+     *
+     * @param templateFile the mrrt report template file been validated
+     * @throws IOException if one is thrown while reading template file
+     * @throws APIException if template file fails validation
+     * @should pass if template template file follows mrrt standards
+     * @should throw api exception if template does not have an html element
+     * @should throw api exception if template has more than one html element
+     * @should throw api exception if html element does not have a head element
+     * @should throw api exception if html element has more than one head element
+     * @should throw api exception if head element does not have a title element
+     * @should throw api exception if head element has more than one title element
+     * @should throw api exception if head element does not have a meta element with charset attribute
+     * @should throw api exception if head element has more than one meta element with charset attribute
+     * @should throw api exception if head element does not have one or more meta elements denoting dublin core attributes
+     * @should throw api exception if head element does not have script element
+     * @should throw api exception if head element has more than one script element
+     * @should throw api exception if script element does not have a template attributes element
+     * @should throw api exception if script element has more than one template attributes element
+     * @should throw api exception if coding schemes element does not have at least one coding scheme element
+     * @should throw api exception if term element does not have a code element
+     * @should throw api exception if term element has more than one code element
+     * @should throw api exception if code element lacks one of meaning scheme or value attribute
+     * @should throw api exception if template attributes element does not have a coded content element
+     * @should throw api exception if template attributes element has more than one coded content element
+     * @should throw api exception if html element does not have a body element
+     * @should throw api exception if html element has more than one body element 
      */
-    @Override
     public void validate(File templateFile) throws IOException {
         final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         final Schema schema;
