@@ -1,0 +1,25 @@
+version: "2"
+services:
+  db:
+    image: achabill/lh-mysql
+    ports:
+      - "3306:3306"
+    container_name: &db lh-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: librehealth
+      MYSQL_USER: &lh_db_user librehealth
+      MYSQL_PASSWORD: &lh_db_password librehealth
+      MYSQL_DATABASE: &lh_db librehealth
+  lh:
+    image: achabill/lh-radiology
+    ports:
+      - "8080:8080"
+    container_name: lh-radiology
+    depends_on:
+      - db
+    environment:
+      MYSQL_USER: *lh_db_user
+      MYSQL_PASSWORD: *lh_db_password
+      MYSQL_DATABASE: *lh_db
+      MYSQL_HOST: *db
+      MYSQL_PORT: 3306
