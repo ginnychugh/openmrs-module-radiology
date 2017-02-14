@@ -32,7 +32,7 @@ The following resources will help with understanding the basic infrastructure be
 
 ## 3 Build, Install and Run
 
-For full instructions visit the repository's [wiki page](https://gitlab.com/librehealth/librehealth-radiology/wikis/home). Java JDK 8 and Maven can be used for building the module. The easiest way to install and run the module is via a Docker Container. Demo data can also be configured. 
+For full instructions visit the repository's [wiki page](https://gitlab.com/librehealth/lh-radiology/wikis/home). Java JDK 8 and Maven can be used for building the module. The easiest way to install and run the module is via a Docker Container. Demo data can also be configured. 
 
 ## 4 License
 MPL v2.0
