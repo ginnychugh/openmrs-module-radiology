@@ -10,7 +10,7 @@ Since this project is an LibreHealth module we try to stick to the best practice
 
 1. Please check to see if you are running a version of LibreHealth Toolkit compatible with this module [README](README#limitations)
 2. Please check if you built this module from the latest commit to the master branch; the bug may already be resolved.
-3. Please check https://gitlab.com/librehealth/librehealth-radiology/issues if the bug has already been filed; if not feel free to open one yourself.
+3. Please check https://gitlab.com/librehealth/lh-radiology/issues if the bug has already been filed; if not feel free to open one yourself.
 
 ### Bug report contents
 
@@ -37,8 +37,8 @@ To help developers understand the problem, please include as much information as
 
 2. [Fork the repo](https://docs.gitlab.com/ce/gitlab-basics/fork-project.html) on which you're working, clone your forked repo to your local computer, and set up the upstream remote:
 
-        git clone git://gitlab.com/YourGitHubUserName/librehealth-radiology.git
-        git remote add upstream https://gitlab.com/librehealth/librehealth-radiology.git
+        git clone git://gitlab.com/YourGitHubUserName/lh-radiology.git
+        git remote add upstream https://gitlab.com/librehealth/lh-radiology.git
 
 3. Checkout out a new local branch based on your master and update it to the latest. The convention is to name the branch after the current Gitlab issue number, e.g. RAD-123:
 
@@ -101,7 +101,7 @@ To help developers understand the problem, please include as much information as
         git push -f
 
   In order to make a merge request,
-  * Navigate to the modules repository you just pushed to (e.g. https://gitlab.com/your-user-name//librehealth-radiology)
+  * Navigate to the modules repository you just pushed to (e.g. https://gitlab.com/your-user-name//lh-radiology)
   * Click "Merge Request".
   * Write your branch name in the branch field (this is filled with "master" by default)
   * Click "Update Commit Range".
