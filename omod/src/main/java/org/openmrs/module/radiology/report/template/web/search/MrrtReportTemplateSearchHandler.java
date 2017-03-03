@@ -53,7 +53,7 @@ public class MrrtReportTemplateSearchHandler implements SearchHandler {
             .build();
     
     private final SearchConfig searchConfig = new SearchConfig("default", RestConstants.VERSION_1 + "/mrrtreporttemplate",
-            Arrays.asList("2.0.*"), searchQuery);
+            Arrays.asList("2.*.*"), searchQuery);
     
     /**
      * @see org.openmrs.module.webservices.rest.web.resource.api.SearchHandler#getSearchConfig()
