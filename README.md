@@ -1,7 +1,6 @@
 ![Librehealth](http://librehealth.io/img/logo-small.png)
 # Librehealth Radiology Module
 ***
-#### (_librehealth-radiology_)
 
 ## 1 Overview
 
@@ -15,13 +14,14 @@ Information System (RIS) onto [Librehealth EHR](https://gitlab.com/librehealth/L
 
 ## 2 Librehealth Community 
 
-[![LibreHealth Forums](https://img.shields.io/badge/librehealth-forum-orange.svg)](https://forums.librehealth.io/)
-[![LibreHealth Chat](https://img.shields.io/badge/librehealth-chat-orange.svg)](https://chat.librehealth.io)
+[![LibreHealth Radiology Forums](https://img.shields.io/badge/librehealth-forum-orange.svg)](https://forums.librehealth.io/)
+[![LibreHealth Radiology Chat](https://img.shields.io/badge/librehealth-chat-orange.svg)](https://chat.librehealth.io)
 [![LibreHealth Radiology Telegram](https://img.shields.io/badge/librehealth%20radiology-telegram-blue.svg)](http://telegram.me/LibreHealth%20Radiology)
 [![LibreHealth Radiology Wiki](https://img.shields.io/badge/librehealth%20radiology-wiki-blue.svg)](https://gitlab.com/librehealth/lh-radiology/wikis/home)
 
 ### 2.1 Contributing and the Google Summer of Code
-Contributions are very welcome, we can definitely use your help! Librehealth is planning to participate in the Google Summer of Code 2017 for which there is no shortage of mentors and tasks that prospective students can sign up for.  Browse the [chat room](https://chat.librehealth.io/channel/gci) and [forum](https://forums.librehealth.io/c/community/gsoc) for more information on planned tasks and opportunities for students!
+Contributions are very welcome, we can definitely use your help! Librehealth has been accepted to participate in the Google Summer of Code 2017 for which there is no shortage of mentors and tasks that prospective students can sign up for.  Browse the [chat room](https://chat.librehealth.io/channel/gci) and [forum](https://forums.librehealth.io/c/community/gsoc) for more information on planned tasks and opportunities for students! To get started , claim a 
+ticket here [GSOC 2017 issues](https://gitlab.com/librehealth/lh-radiology/issues) and happy coding. Look forward to your pull requests 
 
 ### 2.2 Community and Support
 The project is under collaboration with [librehealth.io](http://librehealth.io), an umbrella organization for health IT projects. <br>
