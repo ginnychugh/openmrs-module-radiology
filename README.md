@@ -19,7 +19,7 @@ Information System (RIS) onto [Librehealth EHR](https://gitlab.com/librehealth/L
 [![LibreHealth Radiology Telegram](https://img.shields.io/badge/librehealth%20radiology-telegram-blue.svg)](http://telegram.me/LibreHealth%20Radiology)
 [![LibreHealth Radiology Wiki](https://img.shields.io/badge/librehealth%20radiology-wiki-blue.svg)](https://gitlab.com/librehealth/lh-radiology/wikis/home)
 
-### 2.1 Contributing and the Google Summer of Code
+### 2.1 Contributing and participating in the 2017 Google Summer of Code
 Contributions are very welcome, we can definitely use your help! Librehealth has been accepted to participate in the Google Summer of Code 2017 for which there is no shortage of mentors and tasks that prospective students can sign up for.  Browse the [chat room](https://chat.librehealth.io/channel/gci) and [forum](https://forums.librehealth.io/c/community/gsoc) for more information on planned tasks and opportunities for students! To get started , claim a 
 ticket here [GSOC 2017 issues](https://gitlab.com/librehealth/lh-radiology/issues) and happy coding. Look forward to your pull requests 
 
@@ -33,7 +33,7 @@ The following resources will help with understanding the basic infrastructure be
 * [Informatics - Radiology Workflow](https://www.youtube.com/watch?v=czApoO5N9K8): A youtube video which introduces the concepts behind hospital EHR infrastructure, HL7 and radiology information system by following a patient through the hospital and radiology department.
 * [Writing effective user stories](https://www.youtube.com/watch?v=6q5-cVeNjCE): A youtube video which introduces the concepts and framework of developing user stories and outlines the techniques and motivations behind writing effective ones.
 * [Overview of Radiology information Systems and EMR](https://www.acr.org/~/media/ACR/Documents/PDF/Advocacy/IT%20Reference%20Guide/IT%20Ref%20Guide%20RISEMR.pdf): A PDF document which outlines the importance of a radiology information system and serves as a good overview for describing core functionalities which can be used to guide the development of user stories prior to implementation of the module.
-
+* [User stories for Radiology Information System](https://librehealth.gitbooks.io/radiology-user-stories/content/)
 
 ## 3 Build, Install and Run
 
