@@ -11,6 +11,11 @@ build_job:
     - mvn clean package --batch-mode
   only:
     - master
+    
+  artifacts:
+    paths:
+      - omod/target/*.omod
+    expire_in: 5 days
 
 deploy_job:
   stage: deploy
