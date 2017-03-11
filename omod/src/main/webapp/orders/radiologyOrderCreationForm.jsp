@@ -15,6 +15,14 @@
 
 <script type="text/javascript">
   var $j = jQuery.noConflict();
+  
+  function onQuestionSelect(concept) {
+    $j("#conceptDescription").html(concept.description);
+  }
+
+  function onReasonSelect(concept) {
+    $j("#reasonDescription").html(concept.description);
+  }
 
   $j(document).ready(
           function() {
