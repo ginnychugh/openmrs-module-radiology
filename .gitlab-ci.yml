@@ -26,5 +26,5 @@ deploy_job:
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress omod/target/radiology-0.1.0-dev-SNAPSHOT.omod ci@radiology.librehealth.io:/var/lib/OpenMRS/lh-toolkit/modules
+    - rsync --log-file=/home/gichoya/rsyncd.log -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress omod/target/radiology-0.1.0-dev-SNAPSHOT.omod ci@radiology.librehealth.io:/var/lib/OpenMRS/lh-toolkit/modules
     - sudo service tomcat8 restart
