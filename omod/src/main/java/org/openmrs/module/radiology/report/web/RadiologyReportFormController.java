@@ -198,7 +198,7 @@ public class RadiologyReportFormController {
         }
         
         try {
-            radiologyReportService.saveRadiologyReport(radiologyReport);
+            radiologyReportService.saveRadiologyReport(radiologyReport, radiologyReport.getBody());
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.RadiologyReport.completed");
             modelAndView.setViewName(

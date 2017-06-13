@@ -189,6 +189,13 @@
 			parent directories are created if they do not exist.
 		</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.complexConcept</property>
+		<datatypeClassname>org.openmrs.ConceptComplex</datatypeClassname>
+		<description>
+			Complex concept that will be used when saving reports as complex obs
+		</description>
+	</globalProperty>
 	<!--Required Global Properties -->
 
 	<!-- Internationalization -->

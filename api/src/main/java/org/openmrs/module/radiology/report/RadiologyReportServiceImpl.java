@@ -9,15 +9,26 @@
  */
 package org.openmrs.module.radiology.report;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.ConceptComplex;
+import org.openmrs.Obs;
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.obs.ComplexData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
@@ -27,6 +38,9 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
     private static final Log log = LogFactory.getLog(RadiologyReportServiceImpl.class);
     
     private RadiologyReportDAO radiologyReportDAO;
+    
+    @Autowired
+    private RadiologyProperties radiologyProperties;
     
     public void setRadiologyReportDAO(RadiologyReportDAO radiologyReportDAO) {
         this.radiologyReportDAO = radiologyReportDAO;
@@ -127,6 +141,37 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         radiologyReport.setDate(new Date());
         radiologyReport.setStatus(RadiologyReportStatus.COMPLETED);
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
+    }
+    
+    /**
+     * @see RadiologyReportService#saveRadiologyReport(RadiologyReport, String)
+     */
+    @Override
+    @Transactional
+    public synchronized RadiologyReport saveRadiologyReport(RadiologyReport radiologyReport, String content) {
+        
+        final Obs obs = new Obs();
+        final ConceptComplex concept = radiologyProperties.getConceptForReport();
+        obs.setConcept(concept);
+        obs.setPerson(radiologyReport.getRadiologyOrder()
+                .getPatient());
+        obs.setObsDatetime(new Date());
+        File tmpFile = null;
+        InputStream complexDataInputStream = null;
+        try {
+            tmpFile = File.createTempFile("report", ".html");
+            FileUtils.writeStringToFile(tmpFile, content);
+            complexDataInputStream = new FileInputStream(tmpFile);
+        }
+        catch (IOException e) {
+            throw new APIException(e.getMessage(), e);
+        }
+        final ComplexData complexData = new ComplexData(tmpFile.getName(), complexDataInputStream);
+        obs.setComplexData(complexData);
+        radiologyReport.setObs(obs);
+        Context.getObsService()
+                .saveObs(obs, "");
+        return saveRadiologyReport(radiologyReport);
     }
     
     /**

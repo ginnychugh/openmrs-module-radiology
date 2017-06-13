@@ -99,6 +99,8 @@ public class RadiologyConstants {
      */
     public static final String GP_MRRT_REPORT_TEMPLATE_DIR = "radiology.reportTemplatesHome";
     
+    public static final String GP_COMPLEX_CONCEPT = "radiology.complexConcept";
+    
     private RadiologyConstants() {
         // Utility class not meant to be instantiated.
     }

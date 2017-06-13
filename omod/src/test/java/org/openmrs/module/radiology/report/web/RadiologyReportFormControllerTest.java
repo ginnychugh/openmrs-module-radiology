@@ -319,8 +319,11 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
         RadiologyReport mockCompletedRadiologyReport = mockRadiologyReport;
         mockCompletedRadiologyReport.setStatus(RadiologyReportStatus.COMPLETED);
         BindingResult reportErrors = mock(BindingResult.class);
+        String mockContent = "<h2>Hello World</h2>";
+        mockRadiologyReport.setBody(mockContent);
         
-        when(radiologyReportService.saveRadiologyReport(mockRadiologyReport)).thenReturn(mockCompletedRadiologyReport);
+        when(radiologyReportService.saveRadiologyReport(mockRadiologyReport, mockContent))
+                .thenReturn(mockCompletedRadiologyReport);
         
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         mockRequest.addParameter("completeRadiologyReport", "completeRadiologyReport");
@@ -330,7 +333,7 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
         ModelAndView modelAndView =
                 radiologyReportFormController.completeRadiologyReport(mockRequest, mockRadiologyReport, reportErrors);
         
-        verify(radiologyReportService, times(1)).saveRadiologyReport(mockRadiologyReport);
+        verify(radiologyReportService, times(1)).saveRadiologyReport(mockRadiologyReport, mockContent);
         verifyNoMoreInteractions(radiologyReportService);
         
         assertNotNull(modelAndView);
@@ -397,7 +400,8 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
         
         // given
         RadiologyReport mockRadiologyReport = RadiologyTestData.getMockRadiologyReport1();
-        
+        String mockContent = "<h2></h2>";
+        mockRadiologyReport.setBody(mockContent);
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         mockRequest.addParameter("completeRadiologyReport", "completeRadiologyReport");
         MockHttpSession mockSession = new MockHttpSession();
@@ -405,13 +409,13 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
         
         BindingResult reportErrors = mock(BindingResult.class);
         
-        when(radiologyReportService.saveRadiologyReport(mockRadiologyReport))
+        when(radiologyReportService.saveRadiologyReport(mockRadiologyReport, mockContent))
                 .thenThrow(new APIException("RadiologyReport.cannot.complete.reported"));
         
         ModelAndView modelAndView =
                 radiologyReportFormController.completeRadiologyReport(mockRequest, mockRadiologyReport, reportErrors);
         
-        verify(radiologyReportService, times(1)).saveRadiologyReport(mockRadiologyReport);
+        verify(radiologyReportService, times(1)).saveRadiologyReport(mockRadiologyReport, mockContent);
         verifyNoMoreInteractions(radiologyReportService);
         
         assertNotNull(modelAndView);

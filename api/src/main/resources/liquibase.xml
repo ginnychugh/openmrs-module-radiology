@@ -568,4 +568,15 @@
 			<column name="uuid" value="d9015276-b7b1-45f1-ad72-323896e75a52" />
 		</insert>
 	</changeSet>
+	<changeSet id="radiology-46" author="ivange94">
+		<comment>Add obs_id column to table radiology_report</comment>
+		<addColumn tableName="radiology_report">
+			<column name="obs_id" type="int">
+				<constraints nullable="true"/>
+			</column>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="radiology_report_obs_id_fk"
+								 baseTableName="radiology_report" baseColumnNames="obs_id"
+								 referencedTableName="obs" referencedColumnNames="obs_id"/>
+	</changeSet>
 </databaseChangeLog>
