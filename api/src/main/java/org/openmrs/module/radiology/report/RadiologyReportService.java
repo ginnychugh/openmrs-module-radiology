@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology.report;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.openmrs.annotation.Authorized;
@@ -16,6 +17,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.radiology.RadiologyPrivileges;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
 
 /**
  * Service layer for {@code RadiologyReport}.
@@ -55,6 +57,9 @@ public interface RadiologyReportService extends OpenmrsService {
      */
     @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_REPORTS)
     public RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder);
+    
+    @Authorized
+    public RadiologyReport createRadiologyReport(RadiologyOrder order, MrrtReportTemplate template);
     
     /**
      * Saves an existing {@code RadiologyReport} which is in a draft state to the database.

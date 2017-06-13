@@ -147,8 +147,8 @@ public class MrrtReportTemplateResourceTest {
     */
     @Test
     public void getDisplayString_shouldReturnTemplateIdentifiertitleOfGivenMrrtReportTemplate() throws Exception {
-        mrrtReportTemplate.setDcTermsIdentifier("org/radrep/0001");
-        assertThat(mrrtReportTemplateResource.getDisplayString(mrrtReportTemplate), is("org/radrep/0001"));
+        mrrtReportTemplate.setDcTermsTitle("hello world");
+        assertThat(mrrtReportTemplateResource.getDisplayString(mrrtReportTemplate), is("hello world"));
     }
     
     /**

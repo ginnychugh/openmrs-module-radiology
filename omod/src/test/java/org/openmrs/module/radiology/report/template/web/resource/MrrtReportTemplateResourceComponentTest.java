@@ -37,7 +37,7 @@ public class MrrtReportTemplateResourceComponentTest
      */
     @Override
     public String getDisplayProperty() {
-        return "org/radrep/0001";
+        return "title1";
     }
     
     /**

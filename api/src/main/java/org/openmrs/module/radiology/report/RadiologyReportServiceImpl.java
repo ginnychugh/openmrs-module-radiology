@@ -9,15 +9,29 @@
  */
 package org.openmrs.module.radiology.report;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.openmrs.ConceptComplex;
+import org.openmrs.Obs;
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
+import org.openmrs.obs.ComplexData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
@@ -27,6 +41,9 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
     private static final Log log = LogFactory.getLog(RadiologyReportServiceImpl.class);
     
     private RadiologyReportDAO radiologyReportDAO;
+    
+    @Autowired
+    private RadiologyProperties radiologyProperties;
     
     public void setRadiologyReportDAO(RadiologyReportDAO radiologyReportDAO) {
         this.radiologyReportDAO = radiologyReportDAO;
@@ -52,6 +69,29 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
             throw new APIException("radiology.RadiologyReport.cannot.create.already.completed");
         }
         final RadiologyReport radiologyReport = new RadiologyReport(radiologyOrder);
+        return radiologyReportDAO.saveRadiologyReport(radiologyReport);
+    }
+    
+    @Override
+    @Transactional
+    public RadiologyReport createRadiologyReport(RadiologyOrder order, MrrtReportTemplate template) {
+        if (order == null) {
+            throw new IllegalArgumentException("radiologyOrder cannot be null");
+        }
+        if (order.isNotCompleted()) {
+            throw new APIException("radiology.RadiologyReport.cannot.create.for.not.completed.order");
+        }
+        if (radiologyReportDAO.hasRadiologyOrderClaimedRadiologyReport(order)) {
+            throw new APIException("radiology.RadiologyReport.cannot.create.already.claimed");
+        }
+        if (radiologyReportDAO.hasRadiologyOrderCompletedRadiologyReport(order)) {
+            throw new APIException("radiology.RadiologyReport.cannot.create.already.completed");
+        }
+        if (template == null) {
+            throw new IllegalArgumentException("reportTemplate cannot be null");
+        }
+        final RadiologyReport radiologyReport = new RadiologyReport(order);
+        radiologyReport.setReportTemplate(template);
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
     }
     
@@ -126,7 +166,57 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         }
         radiologyReport.setDate(new Date());
         radiologyReport.setStatus(RadiologyReportStatus.COMPLETED);
+        saveRadiologyReportBodyAsComplexObs(radiologyReport);
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
+    }
+    
+    private void saveRadiologyReportBodyAsComplexObs(RadiologyReport report) {
+        final Obs obs = new Obs();
+        final ConceptComplex concept = radiologyProperties.getConceptForReport();
+        obs.setConcept(concept);
+        obs.setPerson(report.getRadiologyOrder()
+                .getPatient());
+        obs.setObsDatetime(new Date());
+        File tmpFile = null;
+        InputStream complexDataInputStream = null;
+        try {
+            tmpFile = File.createTempFile("report", ".html");
+            FileUtils.writeStringToFile(tmpFile, getReportContent(report));
+            complexDataInputStream = new FileInputStream(tmpFile);
+        }
+        catch (IOException e) {
+            throw new APIException(e.getMessage(), e);
+        }
+        final ComplexData complexData = new ComplexData(java.util.UUID.randomUUID()
+                .toString(), complexDataInputStream);
+        obs.setComplexData(complexData);
+        report.setObs(obs);
+        Context.getObsService()
+                .saveObs(obs, "");
+    }
+    
+    private String getReportContent(RadiologyReport report) {
+        final String header =
+                "<!DOCTYPE html>\n" + "<html>\n" + "<head>\n" + "<title>Diagnosis</title>\n" + "</head>\n" + "<body>\n";
+        final String footer = "\n</body>\n" + "</html>";
+        return header + report.getBody() + footer;
+    }
+    
+    private String getHeaderFromReportTemplate(MrrtReportTemplate reportTemplate) {
+        if (reportTemplate == null) {
+            throw new IllegalArgumentException("reportTemplate cannot be null");
+        }
+        final File templateFile = new File(reportTemplate.getPath());
+        final Document doc;
+        try {
+            doc = Jsoup.parse(templateFile, null);
+        }
+        catch (IOException e) {
+            throw new APIException(e.getMessage(), e);
+        }
+        
+        return "<head>" + doc.select("head")
+                .html() + "</head>";
     }
     
     /**

@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.CareSetting;
 import org.openmrs.ConceptClass;
+import org.openmrs.ConceptComplex;
 import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.OrderType;
@@ -25,6 +26,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.OrderService;
 import org.openmrs.api.VisitService;
+import org.openmrs.api.context.Context;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -318,5 +320,12 @@ public class RadiologyProperties {
         }
         
         return templatesPath.toFile();
+    }
+    
+    public ConceptComplex getConceptForReport() {
+        final String conceptUuid = getGlobalProperty(RadiologyConstants.GP_COMPLEX_CONCEPT, true);
+        final ConceptComplex concept = (ConceptComplex) Context.getConceptService()
+                .getConceptByUuid(conceptUuid);
+        return concept;
     }
 }

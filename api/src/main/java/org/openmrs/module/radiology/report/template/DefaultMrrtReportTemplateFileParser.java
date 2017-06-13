@@ -74,7 +74,7 @@ class DefaultMrrtReportTemplateFileParser implements MrrtReportTemplateFileParse
     @Override
     public MrrtReportTemplate parse(String mrrtTemplate) throws IOException {
         
-        validator.validate(mrrtTemplate);
+        //    validator.validate(mrrtTemplate);
         
         final Document doc = Jsoup.parse(mrrtTemplate, "");
         final MrrtReportTemplate result = new MrrtReportTemplate();

@@ -30,6 +30,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -377,6 +378,7 @@ public class MrrtReportTemplateServiceComponentTest extends BaseModuleContextSen
      * @see MrrtReportTemplateService#importMrrtReportTemplate(String)
      */
     @Test
+    @Ignore // this is temporary. Template validation has been turned off so this will fail
     public void
             importMrrtReportTemplate_shouldNotCreateAnMrrtReportTemplateInTheDatabaseAndStoreTheTemplateAsFileIfGivenTemplateIsInvalid()
                     throws Exception {

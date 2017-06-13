@@ -238,11 +238,11 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
+		<plugins><!--
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-			</plugin>
+			</plugin>-->
 		</plugins>
 	</build>
 

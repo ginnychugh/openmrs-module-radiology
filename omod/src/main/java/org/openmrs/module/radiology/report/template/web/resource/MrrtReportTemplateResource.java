@@ -111,7 +111,7 @@ public class MrrtReportTemplateResource extends DataDelegatingCrudResource<MrrtR
      */
     @PropertyGetter("display")
     public String getDisplayString(MrrtReportTemplate mrrtReportTemplate) {
-        return mrrtReportTemplate.getDcTermsIdentifier();
+        return mrrtReportTemplate.getDcTermsTitle();
     }
     
     /**

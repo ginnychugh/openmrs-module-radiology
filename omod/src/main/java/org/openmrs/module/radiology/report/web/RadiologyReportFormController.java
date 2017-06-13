@@ -17,6 +17,8 @@ import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.report.RadiologyReportValidator;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplate;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 /**
  * Controller for the form handling entry, display, saving, unclaiming of {@code RadiologyReport's}.
@@ -41,6 +45,8 @@ public class RadiologyReportFormController {
     
     static final String RADIOLOGY_REPORT_FORM_VIEW = "/module/radiology/reports/radiologyReportForm";
     
+    private String MRRT_RADIOLOGY_REPORT_FORM_URL_MAPPING = "/module/radiology/mrrtReport.form";
+    
     @Autowired
     private RadiologyReportService radiologyReportService;
     
@@ -49,6 +55,9 @@ public class RadiologyReportFormController {
     
     @Autowired
     private VoidRadiologyReportRequestValidator voidRadiologyReportRequestValidator;
+    
+    @Autowired
+    private MrrtReportTemplateService mrrtReportTemplateService;
     
     @InitBinder("radiologyReport")
     protected void initBinderRadiologyReport(WebDataBinder webDataBinder) {
@@ -75,6 +84,14 @@ public class RadiologyReportFormController {
                 "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + radiologyReport.getId());
     }
     
+    @RequestMapping(method = RequestMethod.GET, params = { "orderId", "templateId" })
+    protected ModelAndView createRadiologyReportFromReportTemplate(@RequestParam("orderId") RadiologyOrder order,
+            @RequestParam("templateId") MrrtReportTemplate template) {
+        final RadiologyReport radiologyReport = radiologyReportService.createRadiologyReport(order, template);
+        return new ModelAndView(
+                "redirect:" + MRRT_RADIOLOGY_REPORT_FORM_URL_MAPPING + "?reportId=" + radiologyReport.getId());
+    }
+    
     /**
      * Handles requests for getting existing {@code RadiologyReport's}.
      * 
@@ -87,6 +104,10 @@ public class RadiologyReportFormController {
             getRadiologyReportFormWithExistingRadiologyReport(@RequestParam("reportId") RadiologyReport radiologyReport) {
         
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
+        if (radiologyReport.getReportTemplate() != null) {
+            return new ModelAndView(
+                    "redirect:" + MRRT_RADIOLOGY_REPORT_FORM_URL_MAPPING + "?reportId=" + radiologyReport.getId());
+        }
         addObjectsToModelAndView(modelAndView, radiologyReport);
         modelAndView.addObject(new VoidRadiologyReportRequest());
         return modelAndView;

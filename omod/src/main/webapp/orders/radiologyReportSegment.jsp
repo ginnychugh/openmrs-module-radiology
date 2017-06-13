@@ -4,12 +4,24 @@
   </span>
   <c:choose>
     <c:when test="${radiologyReportNeedsToBeCreated}">
-      <form:form method="post" modelAttribute="radiologyOrder" cssClass="box">
+      <form:form method="post" modelAttribute="radiologyOrder" cssClass="box" id="claimReportForm">
         <tr>
           <td><spring:bind path="orderId">
-              <a href="${pageContext.request.contextPath}/module/radiology/radiologyReport.form?orderId=${status.value}">
+              <div>
+                <span><spring:message code="radiology.radiologyReportType"/></span>
+                <select id="reportType">
+                  <option value="FREE_TEXT">Free Text Report</option>
+                  <option value="MRRT">MRRT Report</option>
+                </select><br>
+                <div class="reportTemplates">
+                  <span><spring:message code="radiology.mrrtReportTemplate.search"/></span>
+                  <input type="text" name="name" id="templateName" placeholder="<spring:message code="radiology.mrrtReportTemplate.search.placeholder"/>">
+                </div>
+                <ul class="update"></ul>
+              </div>
+              <button id="claimReportButton" data-url="${pageContext.request.contextPath}/module/radiology/radiologyReport.form?orderId=${status.value}">
                 <spring:message code="radiology.radiologyReportClaim" />
-              </a>
+              </button>
             </spring:bind></td>
         </tr>
       </form:form>

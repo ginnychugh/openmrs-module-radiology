@@ -397,7 +397,6 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
         
         // given
         RadiologyReport mockRadiologyReport = RadiologyTestData.getMockRadiologyReport1();
-        
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
         mockRequest.addParameter("completeRadiologyReport", "completeRadiologyReport");
         MockHttpSession mockSession = new MockHttpSession();
