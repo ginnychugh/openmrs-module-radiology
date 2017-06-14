@@ -33,8 +33,6 @@ public class RadiologyReport extends BaseOpenmrsData {
     
     private RadiologyReportStatus status;
     
-    private String body;
-    
     private Obs obs;
     
     /**
@@ -176,24 +174,6 @@ public class RadiologyReport extends BaseOpenmrsData {
      */
     public void setStatus(RadiologyReportStatus status) {
         this.status = status;
-    }
-    
-    /**
-     * Get body of RadiologyReport.
-     * 
-     * @return body of RadiologyReport
-     */
-    public String getBody() {
-        return body;
-    }
-    
-    /**
-     * Set body of RadiologyReport.
-     * 
-     * @param body body of RadiologyReport
-     */
-    public void setBody(String body) {
-        this.body = body;
     }
     
     public Obs getObs() {

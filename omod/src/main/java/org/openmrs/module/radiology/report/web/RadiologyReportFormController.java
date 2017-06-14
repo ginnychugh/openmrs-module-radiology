@@ -198,7 +198,8 @@ public class RadiologyReportFormController {
         }
         
         try {
-            radiologyReportService.saveRadiologyReport(radiologyReport, radiologyReport.getBody());
+            String tmpContent = "";// this is temporary the content should be sent as a parameter
+            radiologyReportService.saveRadiologyReport(radiologyReport, tmpContent);
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.RadiologyReport.completed");
             modelAndView.setViewName(

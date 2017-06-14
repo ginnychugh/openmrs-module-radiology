@@ -579,4 +579,8 @@
 								 baseTableName="radiology_report" baseColumnNames="obs_id"
 								 referencedTableName="obs" referencedColumnNames="obs_id"/>
 	</changeSet>
+	<changeSet id="radiology-47" author="ivange94">
+		<comment>Delete report_body from radiology_report table</comment>
+		<dropColumn tableName="radiology_report" columnName="report_body"/>
+	</changeSet>
 </databaseChangeLog>

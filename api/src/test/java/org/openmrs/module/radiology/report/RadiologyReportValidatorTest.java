@@ -44,7 +44,6 @@ public class RadiologyReportValidatorTest {
         radiologyOrder.setStudy(radiologyStudy);
         radiologyReport = new RadiologyReport(radiologyOrder);
         radiologyReport.setPrincipalResultsInterpreter(new Provider());
-        radiologyReport.setBody("Found a broken bone.");
     }
     
     /**
@@ -117,8 +116,6 @@ public class RadiologyReportValidatorTest {
     @Test
     public void validate_shouldFailValidationIfReportBodyIsNullOrEmptyOrWhitespacesOnly() throws Exception {
         
-        radiologyReport.setBody(null);
-        
         Errors errors = new BindException(radiologyReport, "radiologyReport");
         new RadiologyReportValidator().validate(radiologyReport, errors);
         
@@ -131,8 +128,6 @@ public class RadiologyReportValidatorTest {
             is("error.null"));
         assertTrue(errors.hasFieldErrors("body"));
         
-        radiologyReport.setBody("");
-        
         errors = new BindException(radiologyReport, "radiologyReport");
         new RadiologyReportValidator().validate(radiologyReport, errors);
         
@@ -144,8 +139,6 @@ public class RadiologyReportValidatorTest {
                 .getCode(),
             is("error.null"));
         assertTrue(errors.hasFieldErrors("body"));
-        
-        radiologyReport.setBody("  ");
         
         errors = new BindException(radiologyReport, "radiologyReport");
         new RadiologyReportValidator().validate(radiologyReport, errors);
