@@ -12,6 +12,7 @@ package org.openmrs.module.radiology.order.web.resource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.order.RadiologyOrderService;
+import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
@@ -19,9 +20,11 @@ import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
+import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs2_0.RestConstants2_0;
 
 /**
@@ -138,22 +141,35 @@ public class RadiologyOrderResource extends DataDelegatingCrudResource<Radiology
     
     /**
      * @see org.openmrs.module.webservices.rest.web.resource.impl.BaseDelegatingResource#newDelegate()
-     * @should throw ResourceDoesNotSupportOperationException
      */
     @Override
-    public RadiologyOrder newDelegate() throws ResourceDoesNotSupportOperationException {
+    public RadiologyOrder newDelegate() {
         
-        throw new ResourceDoesNotSupportOperationException();
+        return new RadiologyOrder();
     }
     
     /**
      * @see org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceHandler#save(java.lang.Object)
-     * @should throw ResourceDoesNotSupportOperationException
      */
     @Override
-    public RadiologyOrder save(RadiologyOrder delegate) throws ResourceDoesNotSupportOperationException {
-        
-        throw new ResourceDoesNotSupportOperationException();
+    public RadiologyOrder save(RadiologyOrder delegate) {
+        return Context.getService(RadiologyOrderService.class)
+                .placeRadiologyOrder(delegate);
+    }
+    
+    @Override
+    public DelegatingResourceDescription getCreatableProperties() {
+        DelegatingResourceDescription d = new DelegatingResourceDescription();
+        d.addRequiredProperty("patient");
+        d.addRequiredProperty("concept");
+        d.addProperty("instructions");
+        d.addProperty("orderer");
+        d.addProperty("urgency");
+        d.addProperty("clinicalHistory");
+        d.addProperty("orderReason");
+        d.addProperty("orderReasonNonCoded");
+        d.addProperty("performedStatus");
+        return d;
     }
     
     /**

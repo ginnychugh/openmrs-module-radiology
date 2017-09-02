@@ -9,7 +9,9 @@
  */
 package org.openmrs.module.radiology.order;
 
+import org.openmrs.Order;
 import org.openmrs.TestOrder;
+import org.openmrs.module.radiology.dicom.code.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.study.RadiologyStudy;
 
 /**
@@ -19,6 +21,11 @@ public class RadiologyOrder extends TestOrder {
     
     
     private RadiologyStudy study;
+    
+    public RadiologyOrder() {
+        setAction(Action.NEW);
+        setStudy(new RadiologyStudy());
+    }
     
     public RadiologyStudy getStudy() {
         return study;
@@ -112,5 +119,25 @@ public class RadiologyOrder extends TestOrder {
     public boolean isDiscontinuationAllowed() {
         
         return !this.isDiscontinuedRightNow() && this.isNotInProgress() && this.isNotCompleted();
+    }
+    
+    public String getPerformedStatus() {
+        return getStudy().getPerformedStatus()
+                .toString();
+    }
+    
+    public void setPerformedStatus(String status) {
+        
+        switch (status) {
+            case "COMPLETED":
+                getStudy().setPerformedStatus(PerformedProcedureStepStatus.COMPLETED);
+                break;
+            case "DISCONTINUED":
+                getStudy().setPerformedStatus(PerformedProcedureStepStatus.DISCONTINUED);
+                break;
+            case "IN_PROGRESS":
+                getStudy().setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
+                break;
+        }
     }
 }

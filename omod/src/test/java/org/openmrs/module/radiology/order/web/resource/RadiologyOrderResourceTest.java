@@ -10,7 +10,9 @@
 package org.openmrs.module.radiology.order.web.resource;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.Is.isA;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -245,27 +247,20 @@ public class RadiologyOrderResourceTest {
         
         assertThat(radiologyOrderResource.getDisplayString(radiologyOrder), is("1 - [No Concept]"));
     }
-    
-    /**
-     * @see RadiologyOrderResource#newDelegate()
-     * @verifies throw ResourceDoesNotSupportOperationException
-     */
-    @Test(expected = ResourceDoesNotSupportOperationException.class)
-    public void newDelegate_shouldThrowResourceDoesNotSupportOperationException() throws Exception {
-        
-        radiologyOrderResource.newDelegate();
+
+    @Test
+    public void newDelegate_shouldReturnAnInstanceOfRadiologyOrder() throws Exception {
+        assertThat(radiologyOrderResource.newDelegate(), isA(RadiologyOrder.class));
     }
-    
-    /**
-     * @see RadiologyOrderResource#save(RadiologyOrder)
-     * @verifies throw ResourceDoesNotSupportOperationException
-     */
-    @Test(expected = ResourceDoesNotSupportOperationException.class)
-    public void save_shouldThrowResourceDoesNotSupportOperationException() throws Exception {
-        
-        radiologyOrderResource.save(radiologyOrder);
+
+    @Test
+    public void getCreatableProperties() {
+        DelegatingResourceDescription resourceDescription = radiologyOrderResource.getCreatableProperties();
+        assertThat(resourceDescription.getProperties().keySet(),
+                contains("patient", "concept", "instructions", "orderer", "urgency",
+                "clinicalHistory", "orderReason", "orderReasonNonCoded", "performedStatus"));
     }
-    
+
     /**
      * @see RadiologyOrderResource#delete(RadiologyOrder,String,RequestContext)
      * @verifies throw ResourceDoesNotSupportOperationException
